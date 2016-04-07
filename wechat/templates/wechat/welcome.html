@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div style="text-align: center;">
+   {% if flag == "1" %}
+welcome!<br>
+您的用户名：{{ user.username }}<br>
+您的密码：{{ user.password }}<br>
+       {% else %}
+      <h1 >绑定成功！</h1>
+    {% endif %}
+</div>
+</body>
+</html>
