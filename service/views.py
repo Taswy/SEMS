@@ -106,10 +106,23 @@ def charge(request):
 
 
 
-
+'''
+2.3 反向控制
+API
+URL ：http://wechat123.ngrok.cc/service/AmmeterControl
+HTTP请求方式 ：GET
+返回数据格式 ：JSON
+返回数据示例 ：
+1) {"Ammeter_id":1,"control":1} 1号充电站打开
+2) {"Ammeter_id":1,"control":0} 1号充电站关闭
+说明:
+字段：Ammeter_id ; 类型：int ; 备注：充电站编号
+字段：control ; 类型：int ; 备注：指令
+'''
 
 @csrf_exempt
 def AmmeterControl(request):
     if request.method=="POST":
-        r = json.loads(request.body)
+        #r = json.loads(request.body)
+        pass
 

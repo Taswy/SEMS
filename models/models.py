@@ -41,6 +41,7 @@ class Charge(models.Model):
     end_time = models.DateTimeField(blank=True,null=True)
     overtime = models.IntegerField(default=0)
     message = models.CharField(max_length=200,blank=True)
+    #last_change_time = models.DateTimeField(default=timezone.now(),auto_now=)
     def __unicode__(self):
         return u'用户名：%s,电表id：%s,状态：%s,开始时间：%s,结束时间：%s'%(self.user.username,self.ammeter.id,self.status,self.start_time,self.end_time)
 
