@@ -85,15 +85,18 @@ POST数据示例:{"student_number":1030614418,"Ammeter_id":1,"message"：1}
 
 URL ：http://wechat123.ngrok.cc/service/AmmeterControl
 
-HTTP请求方式 ：GET
+HTTP请求方式 ：POST
+
+POST数据示例:
+{"Ammeter_id":1}
 
 返回数据格式 ：JSON
 
 返回数据示例 ：
 
-1) {"Ammeter_id":1,"control":1} 1号充电站打开
+1) {"control":1} 充电站打开
 
-2) {"Ammeter_id":1,"control":0} 1号充电站关闭 
+2) {"control":0} 充电站关闭 
 
 说明: 
 
