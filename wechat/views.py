@@ -49,7 +49,7 @@ def doregist(request):
                 <head>
                 <meta http-equiv="refresh" content="1;url=/wechat/regist">
                 </head>
-                格式错误！!'''
+                格式错误！'''
             return HttpResponse(html)
 
 
