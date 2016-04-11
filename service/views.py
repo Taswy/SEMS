@@ -59,10 +59,8 @@ POST数据示例:{"student_number":1030614418,"Ammeter_id":1,"message"：1}
 3）取车： {"result":1，"money":10.4} 数据库更新成功,充电金额：10.4元
 {"result":0} 数据库更新失败
 字段：result ; 类型：int 备注：数据库更新结果
-字段：money ; 类型：double 备注：消费金额
+字段：money ; 类型：double 备注：消费金额.
 '''
-
-
 @csrf_exempt
 def charge(request):
     if request.method=="POST":

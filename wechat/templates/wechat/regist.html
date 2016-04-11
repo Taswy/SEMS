@@ -10,6 +10,7 @@
 <form action="doregist" method="post">
     {% csrf_token %}
    {{ form.as_ul }}
+    <input name="openid" type="text" value="{{ openid }}" style="display: none">
     <input type="submit" value="注册"><input type="reset" value="重置">
 </form>
 </div>

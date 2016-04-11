@@ -17,6 +17,7 @@ def bangding(request):
     count  = User.objects.filter(openid=openid).count()
     if count>0:
         user = User.objects.get(openid=openid)
-        return HttpResponse("<h1>Hello,"+user.username+"</h1>")
+        return render(request,"wechat/welcome.html",{"flag":"2","user":user} )
     else:
+        print "*********"
         return  render(request,"wechat/index.html",context)

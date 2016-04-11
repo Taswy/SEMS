@@ -11,6 +11,7 @@ def index(request):
 def regist(request):
     form = UserForm()
     openid = request.GET.get("openid")
+    print openid
     return render(request, "wechat/regist.html",{'form':form,"openid":openid})
 
 
@@ -27,16 +28,22 @@ def doregist(request):
                 <head>
                 <meta http-equiv="refresh" content="1;url=/wechat/regist">
                 </head>
-                此邮箱已被注册'''
+                此账号已被注册'''
                 return HttpResponse(html)
             else:
-                new = User(username=username, password=password,student_number=student_number)
-                new.save()
+                openid = request.POST.get("openid")
+                if openid=="":
+                    new = User(username=username, password=password,student_number=student_number)
+                    new.save()
                 # 邮件发送！
                 # from_student_number = settings.DEFAULT_FROM_student_number
                 # context = "恭喜你注册成功！"+"您的账号是："+username+"；您的密码是："+password
                 # send_mail('Welcome', context, from_student_number, [student_number], fail_silently=False)
-                return redirect("/wechat")
+                    return redirect("/wechat")
+                else:
+                    new = User(username=username, password=password,student_number=student_number,openid=openid)
+                    new.save()
+                    return render(request,"wechat/welcome.html",{"openid":openid,"user":new})
         else:
             html = '''
                 <head>
