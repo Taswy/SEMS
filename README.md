@@ -11,7 +11,7 @@ Smart Electric-Bike Management System (SEMS)
 ###2.1用户检索识别
 **API**
 
-URL ：http://wechat123.ngrok.cc/service/checkStudent
+URL ：http://jnsems.applinzi.com/service/checkStudent
 
 HTTP请求方式 ：POST
 
@@ -33,7 +33,7 @@ POST数据示例:{"student_number":1030614418}
 ###2.2 充电过程交互
 **API**
 
-URL ：http://wechat123.ngrok.cc/service/charge
+URL ：http://jnsems.applinzi.com/service/charge
 
 HTTP请求方式 ：POST
 
@@ -83,7 +83,7 @@ POST数据示例:{"student_number":1030614418,"Ammeter_id":1,"message"：1}
 ###2.3 反向控制
 **API**
 
-URL ：http://wechat123.ngrok.cc/service/AmmeterControl
+URL ：http://jnsems.applinzi.com/service/AmmeterControl
 
 HTTP请求方式 ：POST
 
