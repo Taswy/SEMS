@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-
+import grappelli.urls
 urlpatterns = [
+    url(r'^grappelli/', include(grappelli.urls)),
     url(r'^admin/', include(admin.site.urls)),
+    # url(r'^xadmin/', include(xadmin.site.urls)),
     url(r'^wechat/',include('wechat.urls')),
     url(r'^service/',include('service.urls')),
 ]

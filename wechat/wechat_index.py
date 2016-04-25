@@ -4,8 +4,7 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import render, redirect, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import time
-from wechat_sdk import WechatBasic
-from wechat_sdk.exceptions import ParseError
+from wechat_sdk.basic import WechatBasic
 from wechat_sdk.messages import TextMessage, EventMessage, ImageMessage
 from models.models import User,Charge,Account
 import xml.etree.ElementTree as Etree

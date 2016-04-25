@@ -16,13 +16,13 @@ wechat_instance = WechatBasic(
     appsecret=AppSecret
 )
 
-#创建自定义菜单
+# 创建自定义菜单
 # wechat_instance.create_menu({
 #     'button':[
 #         {
 #             'type': 'view',
 #             'name': '绑定',
-#             'url': 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxce660ee67e094937&redirect_uri=http://wechat123.ngrok.cc/wechat/bangding&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect'
+#             'url': 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxce660ee67e094937&redirect_uri=http://jnsems.applinzi.com/wechat/bangding&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect'
 #         },
 #         {
 #             'type': 'click',
@@ -41,7 +41,7 @@ def WeChatFinishPush(user,charge):
 
 def WeChatAccountPush(user,account):
     name = user.username
-    data = {"name": {"value": name}, "start_time" : {"value":str(account.charge.start_time)},"end_time":{"value":str(account.charge.end_time)},"over":{"value":str(account.charge.overtime)},"overtime":{"value":str(account.charge.overtime)},"money":{"value":account.money}}
+    data = {"name": {"value": name}, "start_time" : {"value":str(account.charge.start_time)},"end_time":{"value":str(account.charge.end_time)},"over":{"value":str(account.charge.overtime)},"over_time":{"value":str(account.charge.overtime)},"money":{"value":account.money}}
     json = wechat_instance.send_template_message(str(user.openid),"qh3B8cPGIr2joDg5izkF66qWdsDR-k6cYexwD_EXR28", data)
     print json
 

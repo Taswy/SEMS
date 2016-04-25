@@ -2,10 +2,13 @@
 from django.shortcuts import render, redirect, HttpResponse
 from models.models import User
 from wechat.form import UserForm
+import os
 
+def getimage(request):
+    path = os.getcwd().replace("\\",'/')
+    image = open(path+"/wechat/test.jpg","rb").read()
+    return HttpResponse(image,content_type="application/image")
 
-def index(request):
-    return render(request, "wechat/index.html")
 
 
 def regist(request):
@@ -16,14 +19,14 @@ def regist(request):
 
 
 def doregist(request):
-    if request.method == 'POST':# 当提交表单时
+    if request.method == 'POST':  # 当提交表单时
         form = UserForm(request.POST) # form 包含提交的数据
-        if form.is_valid():# 如果提交的数据合法
+        if form.is_valid():  # 如果提交的数据合法
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             student_number = form.cleaned_data['student_number']
             count = User.objects.filter(student_number=student_number).count()
-            if count>0:
+            if count > 0:
                 html = '''
                 <head>
                 <meta http-equiv="refresh" content="1;url=/wechat/regist">
@@ -32,7 +35,7 @@ def doregist(request):
                 return HttpResponse(html)
             else:
                 openid = request.POST.get("openid")
-                if openid=="":
+                if openid == "":
                     new = User(username=username, password=password,student_number=student_number)
                     new.save()
                 # 邮件发送！
@@ -60,9 +63,9 @@ def dologin(request):
     if openid == "":
         user = User.objects.get(student_number=student_number)
         if user.password == password:
-            comtext = {"user": user,"flag":"1"}
+            context = {"user": user,"flag":"1"}
             request.session['userid']=user.id
-            return render(request, "wechat/welcome.html", comtext)
+            return render(request, "wechat/welcome.html", context)
         else:
             return redirect("/wechat")
     else:
@@ -70,9 +73,9 @@ def dologin(request):
         if user.password == password:
             user.openid = openid
             user.save()
-            comtext = {"user": user,"flag":"0"}
+            context = {"user": user,"flag":"0"}
             request.session['userid']=user.id
-            return render(request, "wechat/welcome.html", comtext)
+            return render(request, "wechat/welcome.html", context)
         else:
             return HttpResponse("绑定失败！")
 

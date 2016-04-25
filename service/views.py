@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 import time
 from models.models import User, Charge, Ammeter, Account
-from wechat.wechatTest import  WeChatFinishPush, WeChatAccountPush
+from wechat.wechatTest import WeChatFinishPush, WeChatAccountPush
 
 '''
 检查学生信息是否存在(API)
@@ -22,11 +22,13 @@ POST数据示例:{"student_number":1030614418}
 2）{"result":0} 学生不存在
 说明: 字段：result ; 类型：int
 '''
+
+
 @csrf_exempt
 def checkStudent(request):
-    if request.method=="POST":
+    if request.method == "POST":
         r = json.loads(request.body)
-        student_number= r["student_number"]
+        student_number = r["student_number"]
         count = User.objects.filter(student_number=student_number).count()
         response_data = {}
         if count > 0:
@@ -61,18 +63,20 @@ POST数据示例:{"student_number":1030614418,"Ammeter_id":1,"message"：1}
 字段：result ; 类型：int 备注：数据库更新结果
 字段：money ; 类型：double 备注：消费金额.
 '''
+
+
 @csrf_exempt
 def charge(request):
-    if request.method=="POST":
+    if request.method == "POST":
         r = json.loads(request.body)
         message = r["message"]
         student_number = r["student_number"]
         Ammeter_id = r["Ammeter_id"]
         user = User.objects.get(student_number=student_number)
         ammeter = Ammeter.objects.get(id=Ammeter_id)
-        if message==1 :
+        if message == 1:
             try:
-                newChage = Charge(user=user,ammeter=ammeter)
+                newChage = Charge(user=user, ammeter=ammeter)
                 newChage.status = '0'
                 ammeter.status = '0'
                 ammeter.save()
@@ -81,27 +85,27 @@ def charge(request):
             except:
                 response_data = {'result': 0}
             return HttpResponse(json.dumps(response_data), content_type="application/json")
-        elif message==2:
-                charge = Charge.objects.get(user=user,ammeter=ammeter,status='0')
-                charge.end_time = django.utils.timezone.now()
-                charge.save()
-                ammeter.status = '1'
-                ammeter.save()
-                WeChatFinishPush(user,charge)
-                response_data = {'result': 1}
-                return HttpResponse(json.dumps(response_data), content_type="application/json")
-        elif message==3:
-                charge = Charge.objects.get(user=user,ammeter=ammeter,status='0')
-                charge.overtime = int(time.mktime(django.utils.timezone.now().timetuple()))-int(time.mktime(charge.end_time.timetuple()))
-                charge.status = '1'
-                charge.save()
-                newAccout = Account(charge=charge)
-                newAccout.money = 2 + charge.overtime/3600*0.1
-                newAccout.save()
-                WeChatAccountPush(user,newAccout)
-                response_data = {'result': 1,"money":newAccout.money}
-                return HttpResponse(json.dumps(response_data), content_type="application/json")
-
+        elif message == 2:
+            charge = Charge.objects.get(user=user, ammeter=ammeter, status='0')
+            charge.end_time = django.utils.timezone.now()
+            charge.save()
+            ammeter.status = '1'
+            ammeter.save()
+            WeChatFinishPush(user, charge)
+            response_data = {'result': 1}
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+        elif message == 3:
+            charge = Charge.objects.get(user=user, ammeter=ammeter, status='0')
+            charge.overtime = int(time.mktime(django.utils.timezone.now().timetuple())) - int(
+                time.mktime(charge.end_time.timetuple()))
+            charge.status = '1'
+            charge.save()
+            newAccout = Account(charge=charge)
+            newAccout.money = 2 + charge.overtime / 3600 * 0.1
+            newAccout.save()
+            WeChatAccountPush(user, newAccout)
+            response_data = {'result': 1, "money": newAccout.money}
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
 '''
@@ -118,9 +122,11 @@ POST数据示例:
 字段：Ammeter_id ; 类型：int ; 备注：充电站编号
 字段：control ; 类型：int ; 备注：指令
 '''
+
+
 @csrf_exempt
 def AmmeterControl(request):
-    if request.method=="POST":
+    if request.method == "POST":
         r = json.loads(request.body)
         Ammeter_id = r['Ammeter_id']
         ammeter = Ammeter.objects.get(id=Ammeter_id)
@@ -130,5 +136,6 @@ def AmmeterControl(request):
             result = str(charge.status)
         except:
             pass
-        response_data = {'result':result}
-        return HttpResponse(json.dumps(response_data), content_type="application/json")#json.dumps(response_data), content_type="application/json"
+        response_data = {'result': result}
+        return HttpResponse(json.dumps(response_data),
+                            content_type="application/json")
