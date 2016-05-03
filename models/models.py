@@ -34,12 +34,21 @@ class Manager(models.Model):
         verbose_name_plural = "管理员"
 
 
+
+class AmmeterGroup(models.Model):
+    name = models.CharField(null=False,max_length=50)
+
+    def __unicode__(self):
+        return u'组名：%s' % self.name
+
+
 class Ammeter(models.Model):
     name = models.CharField(null=False, max_length=45)
     longitude = models.FloatField()  # 经度
     latitude = models.FloatField()  # 纬度
-    STATUS_CHOICE = (('0', 'ON'), ('1', 'OFF'), ('2', 'ABNORMAL'))
+    STATUS_CHOICE = (('0', 'ON'), ('1', 'OFF'), ('2', 'Low'), ('3', 'ABNORMAL'))
     status = models.CharField(max_length=1, choices=STATUS_CHOICE)
+    group = models.ForeignKey(AmmeterGroup)
 
     def __unicode__(self):
         return u'id : %s 电表名：%s,经度：%f,纬度：%f,状态：%s' % (self.id, self.name, self.longitude, self.latitude, self.status)

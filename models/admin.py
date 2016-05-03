@@ -10,6 +10,7 @@ class UserAdmin(admin.ModelAdmin):
 
 
 admin.site.register(User,UserAdmin)
+admin.site.register(AmmeterGroup)
 admin.site.register(Ammeter)
 admin.site.register(Charge)
 admin.site.register(Manager)
