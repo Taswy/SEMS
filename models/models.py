@@ -39,7 +39,7 @@ class AmmeterGroup(models.Model):
     name = models.CharField(null=False,max_length=50)
 
     def __unicode__(self):
-        return u'组名：%s' % self.name
+        return u'id:%s 组名：%s' % (self.id,self.name)
 
 
 class Ammeter(models.Model):
