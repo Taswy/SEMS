@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 import time
-from models.models import User, Charge, Ammeter, Account
+from models.models import User, Charge, Ammeter, Account, AmmeterGroup
 from wechat.wechatTest import WeChatFinishPush, WeChatAccountPush
 
 '''
@@ -139,3 +139,11 @@ def AmmeterControl(request):
         response_data = {'result': result}
         return HttpResponse(json.dumps(response_data),
                             content_type="application/json")
+
+@csrf_exempt
+def test(request):
+    group = AmmeterGroup.objects.get(id=1)
+    print "group:"+str(group)
+    ammeterlist = group.ammeter_set.all()
+    for ammeter in ammeterlist:
+        print "电表--->id: "+str(ammeter.id) + "  status："+str(ammeter.status)
