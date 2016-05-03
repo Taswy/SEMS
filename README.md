@@ -17,7 +17,7 @@ HTTP请求方式 ：POST
 
 请求数据格式 ：JSON
 
-POST数据示例:{"id_number":"5sdf87e4"}
+POST数据示例:{"card_number":"5sdf87e4"}
 
 id_number ; 类型：str ; 必须：是 ; 备注:序列号
 
