@@ -4,15 +4,21 @@ from django.db import models
 # Create your models here.
 from django.utils import timezone
 
+class Card(models.Model):
+    card_number = models.CharField(null=False, max_length=45, unique=True)
+    student_number = models.IntegerField(null=False)
+
+    def __unicode__(self):
+        return u'序列：%s  学号：%d ' % (self.card_number, self.student_number)
 
 class User(models.Model):
-    card_number = models.CharField(null=False,max_length=45,blank=True)
+    card = models.ForeignKey(Card)
     username = models.CharField(null=False, max_length=45)
     openid = models.CharField(null=False, max_length=45, blank=True)
     password = models.CharField(null=False, max_length=16)
-    student_number = models.IntegerField(unique=True, null=False)
-    phonenumber = models.CharField(null=False, max_length=45, blank=True)
-    mark = models.IntegerField(default=0)
+    phone_number = models.CharField(null=False, max_length=45, blank=True)
+    usage = models.IntegerField(default=1)   #用以标记用户的可用度
+    default_money = models.FloatField(default=0.00) #用户上次拖欠金额
 
     def __unicode__(self):
         return u'用户名：%s,学号：%d' % (self.username, self.student_number)
@@ -37,21 +43,21 @@ class Manager(models.Model):
 
 class AmmeterGroup(models.Model):
     name = models.CharField(null=False,max_length=50)
+    longitude = models.FloatField()  # 经度
+    latitude = models.FloatField()  # 纬度
 
     def __unicode__(self):
-        return u'id:%s 组名：%s' % (self.id,self.name)
+        return u'id:%s 组名：%s 经度：%f,纬度：%f,' % (self.id,self.name, self.longitude, self.latitude)
 
 
 class Ammeter(models.Model):
     name = models.CharField(null=False, max_length=45)
-    longitude = models.FloatField()  # 经度
-    latitude = models.FloatField()  # 纬度
     STATUS_CHOICE = (('0', 'ON'), ('1', 'OFF'), ('2', 'Low'), ('3', 'ABNORMAL'))
     status = models.CharField(max_length=1, choices=STATUS_CHOICE)
     group = models.ForeignKey(AmmeterGroup)
 
     def __unicode__(self):
-        return u'id : %s 电表名：%s,经度：%f,纬度：%f,状态：%s' % (self.id, self.name, self.longitude, self.latitude, self.status)
+        return u'id : %s 电表名：%s,状态：%s' % (self.id, self.name, self.status)
 
     class Meta:
         verbose_name_plural = "充电站"
