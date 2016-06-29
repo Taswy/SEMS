@@ -25,20 +25,23 @@ id_number ; 类型：str ; 必须：是 ; 备注:序列号
 
 返回数据示例 ：
 
-1) {"student_number":1030412535, "result": 1} 学生存在且已经注册，返回学号
+1) {"student_number":1030412535, "student_name":"胡勇", "result": 1} 学生存在且已经注册，返回学号
 
-2）{"student_number":1030412535, "result":0} 学生存在但并未注册
+2）{"student_number":1030412535, "student_name":"胡勇", "result": 0} 学生存在但并未注册
 
-3）{"student_number":None, "result":0} 序列号没有对应的学号
+3）{"student_number":1030412535, "student_name":"胡勇", "result": 2 ,"message":"你的账号被封啦"} result为2时账号异常，提示message。
+
+4）{"student_number":None, "result":0} 序列号没有对应的学号
 
 说明:
 字段：student_number ； 类型：int
+字段：student_name ； 类型：str
 字段：result ; 类型：int
 
-### 2.2 充电开始与结束
+### 2.2 充电开始
 **API**
 
-URL ：http://jnsems.applinzi.com/service/checkStudent
+URL ：http://jnsems.applinzi.com/service/start
 
 HTTP请求方式 ：POST
 
@@ -47,35 +50,56 @@ HTTP请求方式 ：POST
 POST数据示例:
 
     {
-      "id_number":"5sdf87e4",
+      "card_number":"5sdf87e4",
       "id_client": 1,
-      "Ammeter_id":2541,
-      "message":1
+      "Ammeter_id":2541
     }
 
-id_number ; 类型：str ; 必须：是 ; 备注:序列号
+card_number ; 类型：str ; 必须：是 ; 备注:序列号
 
 id_client ; 类型：int； 必须：是； 备注：客户端id
 
 Ammeter_id ; 类型：int； 必须：是； 备注：电表id
-
-message ; 类型：int； 必须：是； 备注：**开始充电：1，结束充电：0**
-
 
 返回数据格式 ：JSON
 
 返回数据示例 ：
 
     {
-      "usage": 1,
-      "money": -2.34
+        "result":1
     }
 
-usage ; 类型：int； 备注：使用情况。为防止用户的不良操作导致不良后果的产生，添加usage字段加以限制。**用户可用：1，用户不可用：2**
+### 2.3 充电结束
+**API**
+URL ：http://jnsems.applinzi.com/service/end
 
-money ； 类型：float；备注：1.开始充电显示上次亏欠金额,取值为负或0。2.结束充电显示本次结账金额，取值为正**（不论usage字段返回值，本次操作都要将金额扣取）**
+HTTP请求方式 ：POST
 
-### 2.3 充电过程交互
+请求数据格式 ：JSON
+
+POST数据示例:
+
+    {
+      "card_number":"5sdf87e4",
+      "id_client": 1,
+      "Ammeter_id":2541
+    }
+
+card_number ; 类型：str ; 必须：是 ; 备注:序列号
+
+id_client ; 类型：int； 必须：是； 备注：客户端id
+
+Ammeter_id ; 类型：int； 必须：是； 备注：电表id
+
+返回数据格式 ：JSON
+
+返回数据示例 ：
+
+    {
+        "result":1
+    }
+    
+### 2.4 充电过程交互
 **API**
 
 URL ：http://jnsems.applinzi.com/service/charge
@@ -98,7 +122,7 @@ POST数据示例:
 
 字段：Ammeter_id ; 类型：int ; 必须：是 ; 备注：充电处编号
 
-字段：message ; 类型：int ; 必须：是；备注 : **1：电表断电 2：电流异常 3：涓流充电 4：零电流充电**
+字段：message ; 类型：int ; 必须：是；备注 : **1：电表断电 2：电流异常 3：涓流充电**
 
 返回数据格式 ：JSON
 
@@ -110,7 +134,7 @@ POST数据示例:
 
 字段：result ; 类型：int  备注：数据库更新结果，简单应答
 
-### 2.4 反向控制
+### 2.5 反向控制
 **API**
 
 URL ：http://jnsems.applinzi.com/service/AmmeterControl
@@ -128,18 +152,18 @@ POST数据示例:
   21652 : 1,
   54855 : 0,
   ...
-  14524 : 1
+  14524 : 2
 }
 
 说明:
 
 键：Ammeter_id ; 值：当前电表状态
 
-### 2.5 询问当前金额
+### 2.6 询问当前金额
 
 **API**
 
-URL ：http://jnsems.applinzi.com/service/charge
+URL ：http://jnsems.applinzi.com/service/money
 
 HTTP请求方式 ：POST
 
