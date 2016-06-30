@@ -11,6 +11,9 @@ class Card(models.Model):
     def __unicode__(self):
         return u'序列：%s  学号：%d ' % (self.card_number, self.student_number)
 
+    class Meta:
+        verbose_name_plural = "学生卡"
+
 class User(models.Model):
     card = models.ForeignKey(Card)
     username = models.CharField(null=False, max_length=45)
@@ -48,6 +51,9 @@ class AmmeterGroup(models.Model):
 
     def __unicode__(self):
         return u'id:%s 组名：%s 经度：%f,纬度：%f,' % (self.id,self.name, self.longitude, self.latitude)
+
+    class Meta:
+        verbose_name_plural = "充电站组"
 
 
 class Ammeter(models.Model):
