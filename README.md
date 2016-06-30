@@ -3,7 +3,7 @@ Smart Electric-Bike Management System (SEMS)
 
 ----------
 ## 1.系统架构
-* 环境：Ubantu14.3+Apache+Python2.7+Django1.8.3
+* 环境：Ubantu14.4+Apache+Python2.7+Django1.8.3
 * 数据库：Django自带的轻量级数据库SQLite
 * web前端：html5
 
