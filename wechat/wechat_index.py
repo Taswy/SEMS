@@ -1,10 +1,10 @@
 # author: HuYong
-# -*- coding: utf-8 -*-
+# coding=utf-8
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render, redirect, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from wechat_sdk.basic import WechatBasic
-from wechat_sdk.messages import TextMessage, EventMessage, ImageMessage
+from wechat_sdk.messages import TextMessage, EventMessage
 from models.models import User,Charge,Account
 
 
@@ -33,13 +33,10 @@ def index(request):
 
     # POST
     # 解析本次请求的 XML 数据
-    try:
-        wechat_instance.parse_data(data=request.body)
-    except :
-        print "Erro!"
+    wechat_instance.parse_data(data=request.body)
     message = wechat_instance.get_message()
     if isinstance(message,TextMessage):
-        response = wechat_instance.response_text("*********")
+        response = wechat_instance.response_text("发送的内容是：\t"+message.content.encode("utf-8"))
         return HttpResponse(response, content_type="application/xml")
     elif isinstance(message, EventMessage):
         if message.type == "click":
