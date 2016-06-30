@@ -41,6 +41,9 @@ class Migration(migrations.Migration):
                 ('longitude', models.FloatField()),
                 ('latitude', models.FloatField()),
             ],
+            options={
+                'verbose_name_plural': '\u5145\u7535\u7ad9\u7ec4',
+            },
         ),
         migrations.CreateModel(
             name='Card',
@@ -49,6 +52,9 @@ class Migration(migrations.Migration):
                 ('card_number', models.CharField(unique=True, max_length=45)),
                 ('student_number', models.IntegerField()),
             ],
+            options={
+                'verbose_name_plural': '\u5b66\u751f\u5361',
+            },
         ),
         migrations.CreateModel(
             name='Charge',
