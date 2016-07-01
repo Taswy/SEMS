@@ -60,14 +60,9 @@ def dologin(request):
     student_number = request.POST.get("student_number", "")
     password = request.POST.get("password", "")
     openid = request.POST.get("openid", "openid")
-    print student_number
-    print password
-    print openid
     if openid == "":
-        try:
-            user = User.objects.get(student_number=student_number)
-        except Exception,e:
-            print e
+        print student_number
+        user = User.objects.filter(student_number=student_number)[0]
         if user.password == password:
             context = {"user": user,"flag":"1"}
             request.session['userid']=user.id
@@ -75,7 +70,9 @@ def dologin(request):
         else:
             return redirect("/wechat")
     else:
-        user = User.objects.get(student_number=student_number)
+        print student_number
+        user = User.objects.filter(student_number=student_number)[0]
+        print user
         if user.password == password:
             user.openid = openid
             user.save()
