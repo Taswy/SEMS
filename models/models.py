@@ -6,20 +6,21 @@ from django.utils import timezone
 
 
 class User(models.Model):
-    card_number = models.CharField(null=False,max_length=45)
-    student_number = models.CharField(null=False, max_length=45)
-    username = models.CharField(null=False, max_length=45)
-    openid = models.CharField(null=False, max_length=45, blank=True)
-    password = models.CharField(null=False, max_length=16)
-    phone_number = models.CharField(null=False, max_length=45, blank=True)
-    usage = models.IntegerField(default=1)   #用以标记用户的可用度
-    default_money = models.FloatField(default=0.00) #用户上次拖欠金额
+    card_number = models.CharField(null=False,max_length=45,verbose_name=u"序列号")#必须
+    student_number = models.CharField(null=False, max_length=45,verbose_name=u"学号")#必须
+    username = models.CharField(null=True,blank=True, max_length=45,verbose_name=u"用户名")
+    openid = models.CharField(null=True,blank=True, max_length=45)
+    password = models.CharField(null=True,blank=True, max_length=16,verbose_name=u"密码")
+    phone_number = models.CharField(null=True, max_length=45, blank=True,verbose_name=u"电话号码")
+    USAGE_CHOICE = (("0",u"不可用"),("1",u"可用"))
+    usage = models.CharField(null=True,choices=USAGE_CHOICE,max_length=1,default='1', blank=True,verbose_name=u"可用度")   #用以标记用户的可用度
+    default_money = models.FloatField(null=True,blank=True,default=0.00,verbose_name=u"拖欠金额") #用户上次拖欠金额
 
     def __unicode__(self):
         return u'用户名：%s,学号：%s' % (self.username, self.student_number)
 
     class Meta:
-        verbose_name_plural = "用户"
+        verbose_name_plural = u"用户"
 
 
 class Manager(models.Model):

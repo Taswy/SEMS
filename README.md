@@ -27,13 +27,11 @@ id_number ; 类型：str ; 必须：是 ; 备注:序列号
 
 返回数据示例 ：
 
-1) {"student_number":1030412535, "student_name":"胡勇", "result": 1} 学生存在且已经注册，返回学号
-
-2）{"student_number":1030412535, "student_name":"胡勇", "result": 0} 学生存在但并未注册
-
-3）{"student_number":1030412535, "student_name":"胡勇", "result": 2 ,"message":"你的账号被封啦"} result为2时账号异常，提示message。
-
-4）{"student_number":None, "result":0} 序列号没有对应的学号
+1) {"student_number":1030412535, "username":"胡勇", "result": 1} 学生存在且已经注册，返回学号
+2）{"student_number":1030412535, "username":None, "result": 0 , "message":"你的账号未注册"} 学生存在但并未注册
+3）{"student_number":1030412535, "username":"胡勇", "result": 0 ,"message":"你的账号被封啦"} result为2时账号异常，提示message。
+4）{"student_number":None, "result":0,"message":"序列号没有对应的学号"} 序列号没有对应的学号
+5) {"result":-1,message:"Exception"} 异常错误返回-1
 
 说明:
 字段：student_number ； 类型：int
