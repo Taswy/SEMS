@@ -9,10 +9,11 @@ Smart Electric-Bike Management System (SEMS)
 * web前端：html5
 
 ## 2.充电站服务端 /service/
+URLBase = http://wechat.tunnel.qydev.com/service
 ### 2.1用户检索识别
 **API**
 
-URL ：http://jnsems.applinzi.com/service/checkStudent
+URL ：/checkStudent
 
 HTTP请求方式 ：POST
 
@@ -42,7 +43,7 @@ id_number ; 类型：str ; 必须：是 ; 备注:序列号
 ### 2.2 充电开始
 **API**
 
-URL ：http://jnsems.applinzi.com/service/start
+URL ：/start
 
 HTTP请求方式 ：POST
 
@@ -72,7 +73,7 @@ Ammeter_id ; 类型：int； 必须：是； 备注：电表id
 
 ### 2.3 充电结束
 **API**
-URL ：http://jnsems.applinzi.com/service/end
+URL ：/end
 
 HTTP请求方式 ：POST
 
@@ -103,7 +104,7 @@ Ammeter_id ; 类型：int； 必须：是； 备注：电表id
 ### 2.4 充电过程交互
 **API**
 
-URL ：http://jnsems.applinzi.com/service/charge
+URL ：/charge
 
 HTTP请求方式 ：POST
 
@@ -138,7 +139,7 @@ POST数据示例:
 ### 2.5 反向控制
 **API**
 
-URL ：http://jnsems.applinzi.com/service/AmmeterControl
+URL ：/AmmeterControl
 
 HTTP请求方式 ：POST
 
@@ -164,7 +165,7 @@ POST数据示例:
 
 **API**
 
-URL ：http://jnsems.applinzi.com/service/money
+URL ：/money
 
 HTTP请求方式 ：POST
 
