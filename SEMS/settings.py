@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 # Application definition
 
 INSTALLED_APPS = (
+    'suit',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,7 +43,13 @@ INSTALLED_APPS = (
     'wechat',
     'service',
 )
-
+SUIT_CONFIG = {
+    'ADMIN_NAME': u'智能电动车管理系统(SEMS)',
+    'MENU': (
+        'sites',
+        {'app': 'models', 'label': u'数据管理'},
+    ),
+}
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',#管理界面国际化
