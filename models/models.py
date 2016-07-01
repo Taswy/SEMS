@@ -4,18 +4,10 @@ from django.db import models
 # Create your models here.
 from django.utils import timezone
 
-class Card(models.Model):
-    card_number = models.CharField(null=False, max_length=45, unique=True)
-    student_number = models.IntegerField(null=False)
-
-    def __unicode__(self):
-        return u'序列：%s  学号：%d ' % (self.card_number, self.student_number)
-
-    class Meta:
-        verbose_name_plural = "学生卡"
 
 class User(models.Model):
-    card = models.ForeignKey(Card)
+    card_number = models.IntegerField(null=False)
+    student_number = models.IntegerField(null=False)
     username = models.CharField(null=False, max_length=45)
     openid = models.CharField(null=False, max_length=45, blank=True)
     password = models.CharField(null=False, max_length=16)
@@ -24,7 +16,7 @@ class User(models.Model):
     default_money = models.FloatField(default=0.00) #用户上次拖欠金额
 
     def __unicode__(self):
-        return u'用户名：%s,学号：%d' % (self.username, self.card.student_number)
+        return u'用户名：%s,学号：%d,卡号：%d' % (self.username, self.student_number,self.card_number)
 
     class Meta:
         verbose_name_plural = "用户"

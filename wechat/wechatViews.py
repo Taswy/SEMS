@@ -19,5 +19,4 @@ def bangding(request):
         user = User.objects.get(openid=openid)
         return render(request,"wechat/welcome.html",{"flag":"2","user":user} )
     else:
-        print "*********"
         return  render(request,"wechat/index.html",context)

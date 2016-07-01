@@ -46,17 +46,6 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='Card',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('card_number', models.CharField(unique=True, max_length=45)),
-                ('student_number', models.IntegerField()),
-            ],
-            options={
-                'verbose_name_plural': '\u5b66\u751f\u5361',
-            },
-        ),
-        migrations.CreateModel(
             name='Charge',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
@@ -87,13 +76,14 @@ class Migration(migrations.Migration):
             name='User',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('card_number', models.IntegerField()),
+                ('student_number', models.IntegerField()),
                 ('username', models.CharField(max_length=45)),
                 ('openid', models.CharField(max_length=45, blank=True)),
                 ('password', models.CharField(max_length=16)),
                 ('phone_number', models.CharField(max_length=45, blank=True)),
                 ('usage', models.IntegerField(default=1)),
                 ('default_money', models.FloatField(default=0.0)),
-                ('card', models.ForeignKey(to='models.Card')),
             ],
             options={
                 'verbose_name_plural': '\u7528\u6237',
