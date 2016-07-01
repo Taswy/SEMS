@@ -7,7 +7,7 @@ from django.utils import timezone
 
 class User(models.Model):
     card_number = models.IntegerField(null=True,blank=True)
-    student_number = models.IntegerField(null=False)
+    student_number = models.CharField(null=False, max_length=45, blank=True)
     username = models.CharField(null=False, max_length=45)
     openid = models.CharField(null=False, max_length=45, blank=True)
     password = models.CharField(null=False, max_length=16)
@@ -16,7 +16,7 @@ class User(models.Model):
     default_money = models.FloatField(default=0.00) #用户上次拖欠金额
 
     def __unicode__(self):
-        return u'用户名：%s,学号：%d' % (self.username, self.student_number)
+        return u'用户名：%s,学号：%s' % (self.username, self.student_number)
 
     class Meta:
         verbose_name_plural = "用户"
