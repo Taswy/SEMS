@@ -48,3 +48,45 @@ def checkStudent(request):
                                 , content_type="application/json")
         except Exception,e:
             return HttpResponse(json.dumps({"result":-1,"message":e.message}), content_type="application/json")
+
+'''
+URL ：/start
+POST数据示例:
+
+{
+  "card_number":"5sdf87e4",
+  "ammeterGroup_number": '0001',
+  "ammeter_number":'0001'
+}
+返回数据示例 ：
+
+{
+    "result":1
+}
+
+{"result":-1,message:"Exception"} 异常错误返回-1
+'''
+def start(request):
+    if request.method == "POST":
+        try:
+            r = json.loads(request.body)
+            card_number = r["card_number"]
+            ammeter_number = r["ammeter_number"]
+            ammeterGroup_number = r["ammeterGroup_number"]
+            user = User.objects.filter(card_number=card_number)[0]
+            ammeterGroup = AmmeterGroup.objects.filter(ammeterGroup_number=ammeterGroup_number)[0]
+            ammeter = Ammeter.objects.filter(ammeter_number=ammeter_number,group=ammeterGroup)[0]
+            response_data = {}
+            #创建一条新的记录，Ammeter.status设置为on（'0'）
+            if ammeter and user:
+                ammeter.status = '0'
+                ammeter.save()
+                #charge = Charge(user=user,ammeter=ammeter) _state 没有定义
+                charge =Charge()
+                charge.user = user
+                charge.ammeter = ammeter
+                charge.save()
+                return HttpResponse(json.dumps({"result":1}), content_type="application/json")
+            return HttpResponse(json.dumps({"result":0}) , content_type="application/json")
+        except Exception,e:
+            return HttpResponse(json.dumps({"result":-1,"message":e.message}), content_type="application/json")

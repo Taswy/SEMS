@@ -6,5 +6,5 @@ from service import views
 
 urlpatterns = [
    url(r'^checkStudent',views.checkStudent),
-
+   url(r'^start',views.start),
 ]

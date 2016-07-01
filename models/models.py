@@ -33,46 +33,53 @@ class Manager(models.Model):
         return u'管理员：%s,权限：%s' % (self.name, self.power)
 
     class Meta:
-        verbose_name_plural = "管理员"
+        verbose_name_plural = u"管理员"
 
 
 
 class AmmeterGroup(models.Model):
-    name = models.CharField(null=False,max_length=50)
-    longitude = models.FloatField()  # 经度
-    latitude = models.FloatField()  # 纬度
+    ammeterGroup_number = models.CharField(null=False,max_length=45)
+    longitude = models.FloatField(null=True,blank=True,verbose_name=u'经度')  # 经度
+    latitude = models.FloatField(null=True,blank=True,verbose_name=u'维度')  # 纬度
 
     def __unicode__(self):
-        return u'id:%s 组名：%s 经度：%f,纬度：%f,' % (self.id,self.name, self.longitude, self.latitude)
+        return u'id:%d 序列号：%s' % (self.id,self.ammeterGroup_number)
 
     class Meta:
-        verbose_name_plural = "充电站组"
+        verbose_name_plural = u"充电站组"
 
 
 class Ammeter(models.Model):
+    ammeter_number = models.CharField(null=False,max_length=45)
     name = models.CharField(null=False, max_length=45)
-    STATUS_CHOICE = (('0', 'ON'), ('1', 'OFF'), ('2', 'Low'), ('3', 'ABNORMAL'))
-    status = models.CharField(max_length=1, choices=STATUS_CHOICE)
-    group = models.ForeignKey(AmmeterGroup)
+    STATUS_CHOICE = (('0', u'开启'), ('1', u'关闭'), ('2', u'低压'), ('3', u'异常'))
+    status = models.CharField(max_length=1, choices=STATUS_CHOICE,default='1',verbose_name=u'电表状态')
+    group = models.ForeignKey(AmmeterGroup,verbose_name=u"所属站组")
 
     def __unicode__(self):
         return u'id : %s 电表名：%s,状态：%s' % (self.id, self.name, self.status)
 
     class Meta:
-        verbose_name_plural = "充电站"
+        verbose_name_plural = u"充电站"
 
 
 class Charge(models.Model):
-    user = models.ForeignKey(User)
-    ammeter = models.ForeignKey(Ammeter)
-    STATUS_CHOICE = (('0', 'CHARGING'), ('1', 'DONE'), ('2', 'ABNORMAL'))
-    status = models.CharField(max_length=1, choices=STATUS_CHOICE)
-    start_time = models.DateTimeField(null=False, default=timezone.now)
-    end_time = models.DateTimeField(blank=True, null=True)
-    overtime = models.IntegerField(default=0)
-    message = models.CharField(max_length=200, blank=True)
+    user = models.ForeignKey(User,verbose_name=u'用户')
+    ammeter = models.ForeignKey(Ammeter,verbose_name=u'电表')
+    STATUS_CHOICE = (('0', u'正在充电'), ('1', u'充电完成'), ('2', u'充电异常'))
+    status = models.CharField(null=False,max_length=1, choices=STATUS_CHOICE,default='0',verbose_name=u'充电状态')
+    start_time = models.DateTimeField(null=False, default=timezone.now,verbose_name=u'开始时间')
+    end_time = models.DateTimeField(blank=True, null=True,verbose_name=u'结束时间')
+    overtime = models.IntegerField(blank=True, null=True,default=0,verbose_name=u'超时')
+    message = models.CharField(blank=True, null=True,max_length=200,verbose_name=u'备注')
+    '''
+    def __init__(self,user=None,ammeter=None):
+        self.ammeter = ammeter
+        self.user = user
+        self.adding = True
+        '''
     class Meta:
-        verbose_name_plural = "充电记录"
+        verbose_name_plural = u"充电记录"
 
 
     def __unicode__(self):
