@@ -6,8 +6,8 @@ from django.utils import timezone
 
 
 class User(models.Model):
-    card_number = models.IntegerField(null=True,blank=True)
-    student_number = models.IntegerField(null=False)
+    card_number = models.IntegerField(null=False,)
+    student_number = models.CharField(null=False,max_length=20)
     username = models.CharField(null=False, max_length=45)
     openid = models.CharField(null=False, max_length=45, blank=True)
     password = models.CharField(null=False, max_length=16)
