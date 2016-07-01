@@ -60,8 +60,14 @@ def dologin(request):
     student_number = request.POST.get("student_number", "")
     password = request.POST.get("password", "")
     openid = request.POST.get("openid", "openid")
+    print student_number
+    print password
+    print openid
     if openid == "":
-        user = User.objects.get(student_number=student_number)
+        try:
+            user = User.objects.get(student_number=student_number)
+        except Exception,e:
+            print e
         if user.password == password:
             context = {"user": user,"flag":"1"}
             request.session['userid']=user.id
