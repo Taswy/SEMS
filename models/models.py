@@ -81,7 +81,6 @@ class Charge(models.Model):
     class Meta:
         verbose_name_plural = "充电记录"
 
-    # last_change_time = models.DateTimeField(default=timezone.now(),auto_now=)
 
     def __unicode__(self):
         return u'用户名：%s,电表id：%s,状态：%s,开始时间：%s,结束时间：%s' % (

@@ -36,9 +36,10 @@ def index(request):
     wechat_instance.parse_data(data=request.body)
     message = wechat_instance.get_message()
     if isinstance(message,TextMessage):
-        response = wechat_instance.response_text("发送的内容是：\t"+message.content.encode("utf-8"))
+        response = wechat_instance.response_text("这是智能电动车管理系统！")
         return HttpResponse(response, content_type="application/xml")
     elif isinstance(message, EventMessage):
+        print message.type
         if message.type == "click":
             if message.key == "MYDATA":
                 openid = message.source
@@ -59,6 +60,13 @@ def index(request):
                     reply = "请先绑定！"
                 response = wechat_instance.response_text(reply)
                 return HttpResponse(response, content_type="application/xml")
+        elif message.type=="scan":
+            articles = [{'title': u'用户绑定',
+                         'description': u'绑定',
+                         'url': u'http://www.google.com.hk/',}]
+            response = wechat_instance.response_news(articles)
+            return HttpResponse(response, content_type="application/xml")
+
 
 
 

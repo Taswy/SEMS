@@ -109,7 +109,3 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join('static')
 
-ADMIN_MEDIA_PREFIX = STATIC_URL + "grappelli/"
-
-GRAPPELLI_ADMIN_TITLE='校园电动车管理系统'
-

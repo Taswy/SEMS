@@ -57,3 +57,20 @@ def WeChatAccountPush(user,account):
 # url_getImage = url_getImage.replace("TICKET",ticket)
 # response = requests.get(url_getImage)
 # print response.read()
+
+
+data ={
+    "expire_seconds": 604800,
+    "action_name": "QR_SCENE",
+    "action_info": {
+        "scene": {
+            "scene_id": 123
+        }
+    }
+}
+
+d = wechat_instance.create_qrcode(data)
+response = wechat_instance.show_qrcode(d.get("ticket"))
+with open('qrcode.jpg', 'wb') as fd:
+    for chunk in response.iter_content(1024):
+        fd.write(chunk)
