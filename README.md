@@ -31,16 +31,17 @@ id_number ; 类型：str ; 必须：是 ; 备注:序列号
 
 2）{"student_number":1030412535, "username":None, "result": 0 , "message":"你的账号未注册"} 学生存在但并未注册
 
-3）{"student_number":1030412535, "username":"胡勇", "result": 0 ,"message":"你的账号被封啦"} result为2时账号异常，提示message。
+3）{"student_number":1030412535, "username":"胡勇", "result": 0 ,"message":"你的账号被封啦"}
 
 4）{"student_number":None, "result":0,"message":"序列号没有对应的学号"} 序列号没有对应的学号
 
 5) {"result":-1,message:"Exception"} 异常错误返回-1
 
 说明:
-字段：student_number ； 类型：int
-字段：student_name ； 类型：str
-字段：result ; 类型：int
+字段：student_number ； 类型：int ；学号
+字段：student_name ； 类型：str ； 姓名
+字段：result ; 类型：int ； 0表示收到请求但逻辑错误 -1表示出现异常
+字段：message ; 类型：str ； 当result为0或-1时返回错误详细信息
 
 ### 2.2 充电开始
 **API**
@@ -72,6 +73,7 @@ ammeter_number ; 类型：str； 必须：是； 备注：电表
     {
         "result":1
     }
+字段：result ; 类型：int ； 1表示成功 -1表示出现异常
 
 ### 2.3 充电结束
 **API**
@@ -103,6 +105,8 @@ ammeter_number ; 类型：str； 必须：是； 备注：电表
         "result":1
     }
     
+字段：result ; 类型：int ； 1表示成功 -1表示出现异常
+
 ### 2.4 充电过程交互
 **API**
 
@@ -115,7 +119,8 @@ HTTP请求方式 ：POST
 POST数据示例:
 
     {
-      "message":1,
+      "current_value":1.05,
+      "voltage_value":2.01,
       "ammeterGroup_number": '0001',
       "ammeter_number":'0001'
     }
@@ -124,17 +129,22 @@ ammeterGroup_number ; 类型：str； 必须：是； 备注：客户端id
 
 ammeter_number ; 类型：str； 必须：是； 备注：电表
 
-message ; 类型：int ; 必须：是；备注 : **1：电表断电 2：电流异常 3：涓流充电**
+current_value ; 类型：float； 必须：是； 备注：当前电流值
+
+voltage_value ; 类型：float； 必须：是； 备注：当前电压值
 
 返回数据格式 ：JSON
 
 返回数据示例 ：
 
-    {"result":1}
-
+    {
+        "result":1
+    }
+    
 说明:
 
-字段：result ; 类型：int  备注：数据库更新结果，简单应答
+字段：result ; 类型：int ； 1表示成功 -1表示出现异常
+
 
 ### 2.5 反向控制
 **API**
@@ -145,22 +155,25 @@ HTTP请求方式 ：POST
 
 POST数据示例:
 
-    {"ammeterGroup_number": '0001',}
+    {"ammeterGroup_number": "0001"}
 
 返回数据格式 ：JSON
 
 返回数据示例 ：
 
     {
-      21652 : 1,
-      54855 : 0,
-      ...
-      14524 : 2
+        "status" : 
+        [
+            "21652" : "1",
+            "54855" : "0",
+            ...
+            "14524" : "2"
+        ]
     }
 
 说明:
-
-键：ammeter_number ; 值：当前电表状态
+返回一个数组status 
+键：电表号，值类型：str  值：1代表电表合闸，0代表电表开闸,2代表释放电表，3代表锁定电表
 
 ### 2.6 询问当前金额
 
@@ -175,8 +188,8 @@ HTTP请求方式 ：POST
 POST数据示例:
 
     {
-      "ammeterGroup_number": '0001',
-      "ammeter_number":'0001'
+      "ammeterGroup_number": "0001",
+      "ammeter_number":"0001"
     }
 
 说明：
@@ -195,7 +208,7 @@ POST数据示例:
 
 说明:
 
-money ； 类型：float；
+money ； 类型：float；当前金额
 
 ## 3.WEB端管理 /Web/
 ### 3.1管理员入口 /admin/
@@ -212,6 +225,36 @@ money ； 类型：float；
 * 过往消费记录的查询
 
 ## 4.微信公众号开发 /WeChat/
-* 用户资料的绑定
-* 消费记录的查询
-* 充好电的信息推送
+###4.1用户资料绑定
+* 通过登陆或者注册绑定
+
+###4.2当前充电状态信息查询
+* 充电制图，当前状态（类似手机充电的图）,充电全过程绘制曲线图
+
+###4.3对自己电表的实时控制
+* 反向控制，开-->关  关-->开
+
+###4.4消费记录查询
+* 前端数据可视化
+
+###4.5查询每个点的可用状态
+* 接入地图API
+* 根据位置排序输出
+
+###4.5微信推送
+1.充电即将完成推送
+
+WeChatPush_almostFinish(user)
+
+2.充电完成推送
+
+WeChatPush_alreadyFinish(user)
+
+3.充电完毕本次充电信息推送
+
+WeChatPush_payFinish(user,charge,account)
+
+4.充电异常推送
+
+WeChatPush_Exception(user,charge)
+
