@@ -54,11 +54,11 @@ def control(request):
 
 
 
-
+#查询消费记录
 def history(request):
     user = getUser(request)
     charges = Charge.objects.filter(user=user).order_by("-start_time")
-    content = ""
+    print charges
     for charge in charges:
         account = Account.objects.get(charge=charge)
         content = content+"充电时间：\n" + str(account.charge.start_time) + "---" + str(account.charge.end_time) + "\n充电费用：" + str(account.money) + "\n******************\n"

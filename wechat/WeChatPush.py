@@ -2,10 +2,6 @@
 # coding=utf-8
 
 
-#充电即将完成推送
-
-def WeChatPush_almostFinish(user):
-    pass
 
 #充电完成推送
 
