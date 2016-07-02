@@ -40,26 +40,17 @@ def index(request):
         return HttpResponse(response, content_type="application/xml")
     elif isinstance(message, EventMessage):
         print message.type
-        if message.type == "click":
-            if message.key == "MYDATA":
-                openid = message.source
-                count = User.objects.filter(openid=openid).count()
-                if count > 0:
-                    user = User.objects.get(openid=openid)
-                    chargeList = Charge.objects.filter(user=user)
-                    result = ""
-                    for charge in chargeList:
-                        account = Account.objects.get(charge=charge)
-                        print account
-                        print account.charge.start_time
-                        print account.charge.end_time
-                        result = result + "充电时间：\n"+str(account.charge.start_time)+"---"+str(account.charge.end_time)+"\n充电费用："+str(account.money)+"\n*************\n"
-                    print result
-                    reply = result
-                else:
-                    reply = "请先绑定！"
-                response = wechat_instance.response_text(reply)
-                return HttpResponse(response, content_type="application/xml")
+        if message.type == "location":
+            longitude = message.longitude
+            latitude  = message.latitude
+            openid = message.source
+            try:
+                user = User.objects.get(openid=openid)
+                user.longitude = float(longitude)
+                user.latitude = float(latitude)
+                user.save()
+            except:
+                pass
         elif message.type=="scan":
             articles = [{'title': u'用户绑定',
                          'description': u'绑定',

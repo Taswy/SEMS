@@ -16,4 +16,5 @@ urlpatterns = [
     url(r'^state$',wechatViews.state),
     url(r'^control$',wechatViews.control),
     url(r'^history$',wechatViews.history),
+    url(r'^AmmeterGroupUrl$',wechatViews.AmmeterGroupUrl),
 ]

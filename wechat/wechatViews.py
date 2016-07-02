@@ -63,3 +63,8 @@ def history(request):
         account = Account.objects.get(charge=charge)
         content = content+"充电时间：\n" + str(account.charge.start_time) + "---" + str(account.charge.end_time) + "\n充电费用：" + str(account.money) + "\n******************\n"
     return HttpResponse(content)
+
+
+#返回充电站的信息列表
+def AmmeterGroupUrl(request):
+    pass
