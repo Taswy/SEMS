@@ -85,15 +85,15 @@ POST数据示例:
 
     {
       "card_number":"5sdf87e4",
-      "id_client": 1,
-      "Ammeter_id":2541
+      "ammeterGroup_number": '0001',
+      "ammeter_number":'0001'
     }
 
 card_number ; 类型：str ; 必须：是 ; 备注:序列号
 
-id_client ; 类型：int； 必须：是； 备注：客户端id
+ammeterGroup_number ; 类型：str； 必须：是； 备注：客户端id
 
-Ammeter_id ; 类型：int； 必须：是； 备注：电表id
+ammeter_number ; 类型：str； 必须：是； 备注：电表
 
 返回数据格式 ：JSON
 
@@ -115,18 +115,16 @@ HTTP请求方式 ：POST
 POST数据示例:
 
     {
-      "id_client": 1,
-      "Ammeter_id":1,
-      "message"：1
+      "message":1,
+      "ammeterGroup_number": '0001',
+      "ammeter_number":'0001'
     }
 
-说明：
+ammeterGroup_number ; 类型：str； 必须：是； 备注：客户端id
 
-字段：id_client ; 类型：int； 必须：是； 备注：客户端id
+ammeter_number ; 类型：str； 必须：是； 备注：电表
 
-字段：Ammeter_id ; 类型：int ; 必须：是 ; 备注：充电处编号
-
-字段：message ; 类型：int ; 必须：是；备注 : **1：电表断电 2：电流异常 3：涓流充电**
+message ; 类型：int ; 必须：是；备注 : **1：电表断电 2：电流异常 3：涓流充电**
 
 返回数据格式 ：JSON
 
@@ -146,22 +144,23 @@ URL ：/AmmeterControl
 HTTP请求方式 ：POST
 
 POST数据示例:
-{"id_client":1}
+
+    {"ammeterGroup_number": '0001',}
 
 返回数据格式 ：JSON
 
 返回数据示例 ：
 
-{
-  21652 : 1,
-  54855 : 0,
-  ...
-  14524 : 2
-}
+    {
+      21652 : 1,
+      54855 : 0,
+      ...
+      14524 : 2
+    }
 
 说明:
 
-键：Ammeter_id ; 值：当前电表状态
+键：ammeter_number ; 值：当前电表状态
 
 ### 2.6 询问当前金额
 
@@ -176,8 +175,8 @@ HTTP请求方式 ：POST
 POST数据示例:
 
     {
-      "id_client": 1,
-      "Ammeter_id":1
+      "ammeterGroup_number": '0001',
+      "ammeter_number":'0001'
     }
 
 说明：
