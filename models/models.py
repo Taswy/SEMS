@@ -41,6 +41,8 @@ class AmmeterGroup(models.Model):
     ammeterGroup_number = models.CharField(null=False,max_length=45)
     longitude = models.FloatField(null=True,blank=True,verbose_name=u'经度')  # 经度
     latitude = models.FloatField(null=True,blank=True,verbose_name=u'维度')  # 纬度
+    valid_number = models.IntegerField(null=False,default=0,verbose_name=u"闲置电表数量")
+    sum_number = models.IntegerField(null=False,default=0,verbose_name=u"站组电表总量")
 
     def __unicode__(self):
         return u'id:%d 序列号：%s' % (self.id,self.ammeterGroup_number)
@@ -52,7 +54,7 @@ class AmmeterGroup(models.Model):
 class Ammeter(models.Model):
     ammeter_number = models.CharField(null=False,max_length=45)
     name = models.CharField(null=False, max_length=45)
-    STATUS_CHOICE = (('0', u'开启'), ('1', u'关闭'), ('2', u'低压'), ('3', u'异常'))
+    STATUS_CHOICE = (('0', u'开启'), ('1', u'关闭'), ('2', u'低压'), ('3', u'异常'),('4', u'闲置'))
     status = models.CharField(max_length=1, choices=STATUS_CHOICE,default='1',verbose_name=u'电表状态')
     group = models.ForeignKey(AmmeterGroup,verbose_name=u"所属站组")
 
