@@ -86,6 +86,15 @@ class Charge(models.Model):
         return u'用户名：%s,电表id：%s,状态：%s,开始时间：%s,结束时间：%s' % (
             self.user.username, self.ammeter.id, self.status, self.start_time, self.end_time)
 
+class Node(models.Model):
+    charge = models.ForeignKey(Charge)
+    current_value = models.FloatField(null=False,verbose_name=u"电流")
+    voltage_value = models.FloatField(null=False,verbose_name=u"电压")
+    time = models.DateTimeField(null=False, default=timezone.now,verbose_name=u'时刻')
+    class Meta:
+        verbose_name_plural = u"时值节点"
+    def __unicode__(self):
+        return u'充电记录：%d 于%s' % (self.charge.id,str(self.time))
 
 class Account(models.Model):
     charge = models.ForeignKey(Charge)
