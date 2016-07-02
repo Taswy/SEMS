@@ -12,6 +12,8 @@ urlpatterns = [
     url(r'^doregist$',views.doregist),
     url(r'^dologin$',views.dologin),
     url(r'^wechat_index$',wechat_index.index),
-    url(r'^bangding$',wechatViews.bangding),
-
+    url(r'^bind$',wechatViews.bind),
+    url(r'^state$',wechatViews.state),
+    url(r'^control$',wechatViews.control),
+    url(r'^histroy$',wechatViews.histroy),
 ]
