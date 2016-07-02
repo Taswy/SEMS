@@ -81,6 +81,3 @@ def dologin(request):
             return render(request, "wechat/welcome.html", context)
         else:
             return HttpResponse("绑定失败！")
-
-
-

@@ -5,6 +5,8 @@ from service import views
 
 
 urlpatterns = [
-   url(r'^checkStudent',views.checkStudent),
-   url(r'^start',views.start),
+    url(r'^checkStudent',views.checkStudent),
+    url(r'^start',views.start),
+    url(r'^end',views.end),
+    url(r'^charge',views.charge),
 ]

@@ -6,7 +6,11 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 import time
 from models.models import User, Charge, Ammeter, Account, AmmeterGroup
-from wechat.wechatTest import WeChatFinishPush, WeChatAccountPush
+
+def calculate_money(start_time,end_time,electricity=0.5):
+    seconds = (end_time - start_time).seconds
+    money = seconds / 3600 * electricity
+    return "%.2f" % money
 
 '''
 URL ：/checkStudent
@@ -23,14 +27,10 @@ def checkStudent(request):
         try:
             r = json.loads(request.body)
             card_number = r["card_number"]
-            user = User.objects.filter(card_number=card_number)[0]
+            user = User.objects.filter(card_number=card_number)
             response_data = {}
-            #用户不存在
-            if not user or not user.student_number:
-                response_data['result'] = 0
-                response_data['message'] = u"序列号没有对应的学号"
-                response_data["student_number"] = None
-            else:
+            if user:
+                user = user[0]
                 if not user.username: #账号没有在微信注册
                     response_data["result"] = 0
                     response_data["student_number"] = user.student_number
@@ -44,6 +44,11 @@ def checkStudent(request):
                     response_data["result"] = 1
                     response_data["student_number"] = user.student_number
                     response_data["username"] = user.username
+            elif not user or not user[0].student_number:
+                #用户不存在
+                response_data['result'] = 0
+                response_data['message'] = u"序列号没有对应的学号"
+                response_data["student_number"] = None
             return HttpResponse(json.dumps(response_data)
                                 , content_type="application/json")
         except Exception,e:
@@ -86,7 +91,52 @@ def start(request):
                 charge.user = user
                 charge.ammeter = ammeter
                 charge.save()
+
                 return HttpResponse(json.dumps({"result":1}), content_type="application/json")
             return HttpResponse(json.dumps({"result":0}) , content_type="application/json")
         except Exception,e:
             return HttpResponse(json.dumps({"result":-1,"message":e.message}), content_type="application/json")
+
+
+'''
+URL ：/end
+
+HTTP请求方式 ：POST
+
+请求数据格式 ：JSON
+
+POST数据示例:
+
+    {
+      "card_number":"5sdf87e4",
+      "ammeterGroup_number": '0001',
+      "ammeter_number":'0001'
+    }
+返回数据示例 ：
+
+    {
+        "result":1
+    }
+    '''
+def end(request):
+    if request.method == "POST":
+        try:
+            r = json.loads(request.body)
+            ammeter_number = r["ammeter_number"]
+            ammeterGroup_number = r["ammeterGroup_number"]
+            ammeterGroup = AmmeterGroup.objects.filter(ammeterGroup_number=ammeterGroup_number)[0]
+            ammeter = Ammeter.objects.filter(ammeter_number=ammeter_number,group=ammeterGroup)[0]
+            charge = Charge.objects.filter(ammeter=ammeter).order_by('-id')[0]
+            response_data = {}
+            #获取对应最新的记录，Ammeter.status设置为off（'1'）,
+            if charge:
+                ammeter.status = '1'
+                ammeter.save()
+                charge.status = '1'
+                charge.end_time = timezone.now()
+                charge.save()
+                return HttpResponse(json.dumps({"result":1}), content_type="application/json")
+            return HttpResponse(json.dumps({"result":0}) , content_type="application/json")
+        except Exception,e:
+            return HttpResponse(json.dumps({"result":-1,"message":e.message}), content_type="application/json")
+
