@@ -13,6 +13,7 @@ def bangding(request):
     rjson = requests.get(url)
     r = json.loads(rjson.text)
     openid = r["openid"]
+    print openid
     context = {"openid":openid}
     count  = User.objects.filter(openid=openid).count()
     if count>0:
