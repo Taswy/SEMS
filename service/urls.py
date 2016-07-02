@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^start',views.start),
     url(r'^end',views.end),
     url(r'^charge',views.charge),
-    #url(r'^AmmeterControl',views.AmmeterControl),
+    url(r'^AmmeterControl',views.AmmeterControl),
+    url(r'^money',views.money),
 
 ]

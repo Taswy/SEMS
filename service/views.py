@@ -3,13 +3,14 @@ import json
 import django
 from django.http import HttpResponse
 from django.utils import timezone
+import datetime
 from django.views.decorators.csrf import csrf_exempt
 import time
 from models.models import User, Charge, Ammeter, Account, AmmeterGroup, Node
 
 def calculate_money(start_time,end_time,electricity=0.5):
-    seconds = (end_time - start_time).seconds
-    money = seconds / 3600 * electricity
+    seconds = (end_time - start_time).total_seconds()
+    money = float(seconds) / 3600 * electricity
     return "%.2f" % money
 
 '''
@@ -172,12 +173,102 @@ def charge(request):
             ammeterGroup = AmmeterGroup.objects.filter(ammeterGroup_number=ammeterGroup_number)[0]
             ammeter = Ammeter.objects.filter(ammeter_number=ammeter_number,group=ammeterGroup)[0]
             charge = Charge.objects.filter(ammeter=ammeter).order_by('-id')[0]
-            #获取对应最新的记录，Ammeter.status设置为off（'1'）,
             if charge:
                 new_node = Node()
                 new_node.current_value = current_value
                 new_node.voltage_value = voltage_value
                 new_node.save()
             return HttpResponse(json.dumps({"result":1}), content_type="application/json")
+        except Exception,e:
+            return HttpResponse(json.dumps({"result":-1,"message":e.message}), content_type="application/json")
+
+'''URL ：/AmmeterControl
+
+HTTP请求方式 ：POST
+
+POST数据示例:
+
+{"ammeterGroup_number": "0001"}
+返回数据格式 ：JSON
+
+返回数据示例 ：
+
+{
+    "21652" : "1",
+    "54855" : "0",
+    ...
+    "14524" : "2"
+}
+说明: 返回一个数组status 键：电表号，值类型：str 值：1代表电表合闸，0代表电表开闸,2代表释放电表，3代表锁定电表
+'''
+def AmmeterControl(request):
+     if request.method == "POST":
+        try:
+            r = json.loads(request.body)
+            ammeterGroup_number = r["ammeterGroup_number"]
+            ammeterGroup = AmmeterGroup.objects.filter(ammeterGroup_number=ammeterGroup_number)[0]
+            response_data = {}
+            if ammeterGroup:
+                ammeter_s = Ammeter.objects.filter(group=ammeterGroup)
+                for ammeter in ammeter_s:
+                    #STATUS_CHOICE = (('0', u'开启'), ('1', u'关闭'), ('2', u'低压'), ('3', u'异常'),('4', u'闲置'))
+                    if ammeter.status == '0' or ammeter.status == '2':
+                        response_data[ammeter.ammeter_number] = "1"
+                    elif ammeter.status == '1':
+                        response_data[ammeter.ammeter_number] = "0"
+                    elif ammeter.status == '3':
+                        response_data[ammeter.ammeter_number] = "3" #异常即为锁定转台
+                    else: #闲置状态
+                        response_data[ammeter.ammeter_number] = "2"
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+        except Exception,e:
+            return HttpResponse(json.dumps({"result":-1,"message":e.message}), content_type="application/json")
+
+'''
+URL ：/money
+
+HTTP请求方式 ：POST
+
+请求数据格式 ：JSON
+
+POST数据示例:
+
+{
+  "ammeterGroup_number": "0001",
+  "ammeter_number":"0001"
+}
+说明：
+
+字段：id_client ; 类型：int； 必须：是； 备注：客户端id
+
+字段：Ammeter_id ; 类型：int ; 必须：是 ; 备注：充电处编号
+
+返回数据格式 ：JSON
+
+返回数据示例 ：
+
+{
+  "money":1.12
+}
+说明:
+
+money ； 类型：float；当前金额
+'''
+def money(request):
+    if request.method == "POST":
+        try:
+            r = json.loads(request.body)
+            ammeter_number = r["ammeter_number"]
+            ammeterGroup_number = r["ammeterGroup_number"]
+            ammeterGroup = AmmeterGroup.objects.filter(ammeterGroup_number=ammeterGroup_number)[0]
+            ammeter = Ammeter.objects.filter(ammeter_number=ammeter_number,group=ammeterGroup)[0]
+            charge = Charge.objects.filter(ammeter=ammeter).order_by('-id')[0]
+            response_data = {}
+            if charge:
+                end_time =  timezone.now()
+                if charge.end_time:
+                    end_time =  charge.end_time
+                response_data["money"] = calculate_money(charge.start_time, end_time)
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
         except Exception,e:
             return HttpResponse(json.dumps({"result":-1,"message":e.message}), content_type="application/json")
