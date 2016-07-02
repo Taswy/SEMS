@@ -15,5 +15,5 @@ urlpatterns = [
     url(r'^bind$',wechatViews.bind),
     url(r'^state$',wechatViews.state),
     url(r'^control$',wechatViews.control),
-    url(r'^histroy$',wechatViews.histroy),
+    url(r'^history$',wechatViews.history),
 ]
