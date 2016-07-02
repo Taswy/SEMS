@@ -225,6 +225,23 @@ money ； 类型：float；当前金额
 * 过往消费记录的查询
 
 ## 4.微信公众号开发 /WeChat/
-* 用户资料的绑定
-* 消费记录的查询
-* 充好电的信息推送
+###4.1用户资料绑定
+* 通过登陆或者注册绑定
+###4.2当前充电状态信息查询
+* 充电制图，当前状态（类似手机充电的图）,充电全过程绘制曲线图
+###4.3对自己电表的实时控制
+* 反向控制，开-->关  关-->开
+###4.4消费记录查询
+* 前端数据可视化
+###4.5查询每个点的可用状态
+* 接入地图API
+* 根据位置排序输出
+###4.5微信推送
+1.充电即将完成推送
+WeChatPush_almostFinish(user)
+2.充电完成推送
+WeChatPush_alreadyFinish(user)
+3.充电完毕本次充电信息推送
+WeChatPush_payFinish(user,charge,account)
+4.充电异常推送
+WeChatPush_Exception(user,charge)
