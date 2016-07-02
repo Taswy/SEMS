@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 import time
-from models.models import User, Charge, Ammeter, Account, AmmeterGroup
+from models.models import User, Charge, Ammeter, Account, AmmeterGroup, Node
 
 def calculate_money(start_time,end_time,electricity=0.5):
     seconds = (end_time - start_time).seconds
@@ -140,3 +140,44 @@ def end(request):
         except Exception,e:
             return HttpResponse(json.dumps({"result":-1,"message":e.message}), content_type="application/json")
 
+'''
+URL ：/charge
+
+HTTP请求方式 ：POST
+
+请求数据格式 ：JSON
+
+POST数据示例:
+
+{
+  "current_value":1.05,
+  "voltage_value":2.01,
+  "ammeterGroup_number": '0001',
+  "ammeter_number":'0001'
+}
+返回数据示例 ：
+
+{
+    "result":1
+}
+'''
+def charge(request):
+    if request.method == "POST":
+        try:
+            r = json.loads(request.body)
+            current_value = r["current_value"]
+            voltage_value = r["voltage_value"]
+            ammeter_number = r["ammeter_number"]
+            ammeterGroup_number = r["ammeterGroup_number"]
+            ammeterGroup = AmmeterGroup.objects.filter(ammeterGroup_number=ammeterGroup_number)[0]
+            ammeter = Ammeter.objects.filter(ammeter_number=ammeter_number,group=ammeterGroup)[0]
+            charge = Charge.objects.filter(ammeter=ammeter).order_by('-id')[0]
+            #获取对应最新的记录，Ammeter.status设置为off（'1'）,
+            if charge:
+                new_node = Node()
+                new_node.current_value = current_value
+                new_node.voltage_value = voltage_value
+                new_node.save()
+            return HttpResponse(json.dumps({"result":1}), content_type="application/json")
+        except Exception,e:
+            return HttpResponse(json.dumps({"result":-1,"message":e.message}), content_type="application/json")
