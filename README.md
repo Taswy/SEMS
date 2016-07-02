@@ -242,19 +242,16 @@ money ； 类型：float；当前金额
 * 根据位置排序输出
 
 ###4.5微信推送
-1.充电即将完成推送
 
-WeChatPush_almostFinish(user)
+1.充电完成推送
 
-2.充电完成推送
+WeChatPush_alreadyFinish(user,charge)
 
-WeChatPush_alreadyFinish(user)
+2.充电完毕本次充电信息推送
 
-3.充电完毕本次充电信息推送
+WeChatPush_payFinish(user,account)
 
-WeChatPush_payFinish(user,charge,account)
-
-4.充电异常推送
+3.充电异常推送
 
 WeChatPush_Exception(user,charge)
 
