@@ -5,7 +5,6 @@ import requests
 import json
 import time
 
-
 WECHAT_TOKEN = 'token'
 AppID = 'wxce660ee67e094937'
 AppSecret = '10108b4f9ec7bb9b76f4699087f620e6'

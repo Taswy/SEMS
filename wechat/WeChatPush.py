@@ -16,32 +16,35 @@ wechat_instance = WechatBasic(
 
 #充电完成推送
 def WeChatPush_alreadyFinish(user,charge):
-    name = user.username
-    data = {"name": {"value": name, "color": "#173177"}, "time": {"value": str(charge.start_time), "color": "#173177"}}
-    json = wechat_instance.send_template_message(str(user.openid), "JAk6ryroKka3T-Y-NNWeiK1ufKUGwnhSbs7CdRHFbD0", data)
+    responsedata = "你好，" + str(user.username) + "\n你的车已经充电完毕，请尽快取车"
+    data = {"data": {"value": responsedata, "color": "#173177"}}
+    json = wechat_instance.send_template_message(str(user.openid), "saRJ7C92DuovutwG57V7wcvxeVoZwp04VvUWSZHOnas", data)
     print json
 
 #充电完毕本次充电信息推送
 def WeChatPush_payFinish(user,account):
     name = user.username
-    data = {"name": {"value": name}, "start_time": {"value": str(account.charge.start_time)},
-            "end_time": {"value": str(account.charge.end_time)}, "over": {"value": str(account.charge.overtime)},
-            "money": {"value": account.money}}
-    json = wechat_instance.send_template_message(str(user.openid), "4z0CrrQxwoK5fHEQIwfv-Yp0z12OF0EAiKBxTXtTn3A", data)
+    money = account.money
+    start_time = account.charge.start_time
+    end_time = account.charge.end_time
+    over_time = account.charge.overtime
+    responsedata = "你好,"+str(name)+":\n本次充电信息：\n开始时间:"+str(start_time)[:-7]+"\n结束时间:"+str(end_time)[:-7]+"\n取车超时："+str(over_time)+"小时"+"\n充电金额:"+str(money)+"元"
+    data = {"message": {"value": responsedata, "color": "#173177"}}
+    json = wechat_instance.send_template_message(str(user.openid), "qG8RIocMDo7bHwhrR1bFqJ6IpULniA1qNcvcT2xzmmU", data)
     print json
 
 
 #充电异常推送
 def WeChatPush_Exception(user,charge):
-    name = user.username
-    data = {"name": {"value": name, "color": "#173177"}, "message": {"value": str(charge.message), "color": "#173177"}}
-    json = wechat_instance.send_template_message(str(user.openid), "gGU5qXAlYED9z-nGl71fvlxk0PKZWdykmGklRpdmjnU", data)
+    responsedata = "你好，"+str(user.username)+"\n当前充电出现异常！\n异常信息："+str(charge.message)
+    data = {"data": {"value": responsedata, "color": "#173177"}}
+    json = wechat_instance.send_template_message(str(user.openid), "_hX6OW53QBj44qN95totWDv6uPVzLu5ejb2Y5wpS7vU", data)
     print json
 
 
 #超时取车
 def WeChatPush_delay(user):
-    name = user.username
-    data = {"name": {"value": name, "color": "#173177"}}
-    json = wechat_instance.send_template_message(str(user.openid), "2IFyKhFfh6P4FJG3-3vIP1Y-73SSV6SIILmFE0Ch_Xc", data)
+    responsedata = "你好，" + str(user.username) + "\n由于长时间未取车占用充电车位，已被管理员处理。\n请自行联系管理员！"
+    data = {"data": {"value": responsedata, "color": "#173177"}}
+    json = wechat_instance.send_template_message(str(user.openid), "OZfofkQxfQ-RjUDvl-sfdiz2-1nn81J4CQb19QgDs-Y", data)
     print json
