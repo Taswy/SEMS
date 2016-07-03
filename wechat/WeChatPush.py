@@ -1,7 +1,18 @@
 # author: HuYong
 # coding=utf-8
-from wechat.wechat_index import wechat_instance
+from wechat_sdk import WechatBasic
+
 #微信推送
+
+WECHAT_TOKEN = 'token'
+AppID = 'wxce660ee67e094937'
+AppSecret = '10108b4f9ec7bb9b76f4699087f620e6'
+
+wechat_instance = WechatBasic(
+    token=WECHAT_TOKEN,
+    appid=AppID,
+    appsecret=AppSecret
+)
 
 #充电完成推送
 def WeChatPush_alreadyFinish(user,charge):
