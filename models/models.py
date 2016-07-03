@@ -40,7 +40,8 @@ class Manager(models.Model):
 
 
 class AmmeterGroup(models.Model):
-    ammeterGroup_number = models.CharField(null=False,max_length=45)
+    ammeterGroup_number = models.CharField(null=False,max_length=45,verbose_name=u'编号')
+    ammeterGroup_name = models.CharField(null=False,max_length=45,blank=True,verbose_name=u'名称')
     longitude = models.FloatField(null=True,blank=True,verbose_name=u'经度')  # 经度
     latitude = models.FloatField(null=True,blank=True,verbose_name=u'维度')  # 纬度
     valid_number = models.IntegerField(null=False,default=0,verbose_name=u"闲置电表数量")
