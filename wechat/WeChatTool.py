@@ -63,18 +63,6 @@ wechat_instance.create_menu({
     ]
 })
 
-#微信推送
-def WeChatFinishPush(user,charge):
-    name = user.username
-    data = {"name": {"value": name, "color": "#173177"}, "time" : {"value":str(charge.start_time),"color" : "#173177"}}
-    json = wechat_instance.send_template_message(str(user.openid),"JAk6ryroKka3T-Y-NNWeiK1ufKUGwnhSbs7CdRHFbD0", data)
-    print json
-
-def WeChatAccountPush(user,account):
-    name = user.username
-    data = {"name": {"value": name}, "start_time" : {"value":str(account.charge.start_time)},"end_time":{"value":str(account.charge.end_time)},"over":{"value":str(account.charge.overtime)},"over_time":{"value":str(account.charge.overtime)},"money":{"value":account.money}}
-    json = wechat_instance.send_template_message(str(user.openid),"qh3B8cPGIr2joDg5izkF66qWdsDR-k6cYexwD_EXR28", data)
-    print json
 
 #创建带参数的二维码
 # url = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=TOKEN"

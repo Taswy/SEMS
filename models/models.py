@@ -12,6 +12,8 @@ class User(models.Model):
     openid = models.CharField(null=True,blank=True, max_length=45)
     password = models.CharField(null=True,blank=True, max_length=16,verbose_name=u"密码")
     phone_number = models.CharField(null=True, max_length=45, blank=True,verbose_name=u"电话号码")
+    longitude = models.FloatField(null=True,blank=True,verbose_name=u'经度')  # 经度
+    latitude = models.FloatField(null=True,blank=True,verbose_name=u'维度')  # 纬度
     USAGE_CHOICE = (("0",u"不可用"),("1",u"可用"))
     usage = models.CharField(null=True,choices=USAGE_CHOICE,max_length=1,default='1', blank=True,verbose_name=u"可用度")   #用以标记用户的可用度
     default_money = models.FloatField(null=True,blank=True,default=0.00,verbose_name=u"拖欠金额") #用户上次拖欠金额
