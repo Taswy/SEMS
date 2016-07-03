@@ -37,3 +37,12 @@ def WeChatPush_Exception(user,charge):
     data = {"name": {"value": name, "color": "#173177"}, "message": {"value": str(charge.message), "color": "#173177"}}
     json = wechat_instance.send_template_message(str(user.openid), "gGU5qXAlYED9z-nGl71fvlxk0PKZWdykmGklRpdmjnU", data)
     print json
+
+
+
+#超时取车
+def WeChatPush_delay(user):
+    name = user.username
+    data = {"name": {"value": name, "color": "#173177"}}
+    json = wechat_instance.send_template_message(str(user.openid), "2IFyKhFfh6P4FJG3-3vIP1Y-73SSV6SIILmFE0Ch_Xc", data)
+    print json

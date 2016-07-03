@@ -1,11 +1,11 @@
 # author: HuYong
 # coding=utf-8
 from django.http import HttpResponseBadRequest
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import  HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from wechat_sdk.basic import WechatBasic
 from wechat_sdk.messages import TextMessage, EventMessage
-from models.models import User,Charge,Account
+from models.models import User
 
 
 WECHAT_TOKEN = 'token'
@@ -51,12 +51,6 @@ def index(request):
                 user.save()
             except:
                 pass
-        elif message.type=="scan":
-            articles = [{'title': u'用户绑定',
-                         'description': u'绑定',
-                         'url': u'http://www.google.com.hk/',}]
-            response = wechat_instance.response_news(articles)
-            return HttpResponse(response, content_type="application/xml")
 
 
 

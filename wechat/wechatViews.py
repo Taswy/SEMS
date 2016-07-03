@@ -65,10 +65,13 @@ def control(request):
 def history(request):
     user = getUser(request)
     charges = Charge.objects.filter(user=user).order_by("-start_time")
-    print charges
+    content = ""
     for charge in charges:
-        account = Account.objects.get(charge=charge)
-        content = content+"充电时间：\n" + str(account.charge.start_time) + "---" + str(account.charge.end_time) + "\n充电费用：" + str(account.money) + "\n******************\n"
+        try:
+            account = Account.objects.get(charge=charge)
+            content = content+"充电时间：\n" + str(account.charge.start_time) + "---" + str(account.charge.end_time) + "\n充电费用：" + str(account.money) + "\n******************\n"
+        except:
+            pass
     return HttpResponse(content)
 
 
