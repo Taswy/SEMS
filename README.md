@@ -248,7 +248,11 @@ WeChatPush_alreadyFinish(user,charge)
 
 WeChatPush_payFinish(user,account)
 
-3.充电异常推送
+3.超时取车
+WeChatPush_delay(user)
+
+4.充电异常推送
 
 WeChatPush_Exception(user,charge)
+
 

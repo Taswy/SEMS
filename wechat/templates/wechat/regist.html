@@ -25,14 +25,6 @@
 </head>
 <body>
 	<div class="content">
-		<div class="ucSimpleHeader">
-			<a href="##" class="Logo"></a>
-			<div class="trigger">
-				<a href="index.html">登录</a>
-				<span>&nbsp;|&nbsp;</span>
-				<a href="regist.html">注册</a>
-			</div>
-		</div>
 		<form name="form1" method="post" action="doregist" id="#mainForm" class="mainForm">
                 {% csrf_token %}
 			<div class="normalInput">
@@ -56,7 +48,7 @@
 			</div>
 			<span class="otherError">请确认已阅读并同意校园电动车管理条例</span>
             <input name="openid" type="text" value="{{ openid }}" style="display: none">
-			<input name="submit" type="submit" value="注册" class="fullBtnBlue" onclick="return check(form1)"/>
+			<input name="submit" type="submit" value="绑定" class="fullBtnBlue" onclick="return check(form1)"/>
 		</form>
     </div>
 </body>
