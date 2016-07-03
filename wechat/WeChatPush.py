@@ -39,7 +39,6 @@ def WeChatPush_Exception(user,charge):
     print json
 
 
-
 #超时取车
 def WeChatPush_delay(user):
     name = user.username
