@@ -54,8 +54,10 @@ def state(request):
 
 #反向控制
 def control(request):
+    action = request.REQUEST.get("action")
     user = getUser(request)
     charge = Charge.objects.filter(user=user).order_by("-start_time")[0]
+
 
 
 

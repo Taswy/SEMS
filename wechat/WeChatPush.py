@@ -35,5 +35,5 @@ def WeChatPush_payFinish(user,account):
 def WeChatPush_Exception(user,charge):
     name = user.username
     data = {"name": {"value": name, "color": "#173177"}, "message": {"value": str(charge.message), "color": "#173177"}}
-    json = wechat_instance.send_template_message(str(user.openid), "JAk6ryroKka3T-Y-NNWeiK1ufKUGwnhSbs7CdRHFbD0", data)
+    json = wechat_instance.send_template_message(str(user.openid), "gGU5qXAlYED9z-nGl71fvlxk0PKZWdykmGklRpdmjnU", data)
     print json
