@@ -36,7 +36,7 @@ def index(request):
     wechat_instance.parse_data(data=request.body)
     message = wechat_instance.get_message()
     if isinstance(message,TextMessage):
-        response = wechat_instance.response_text("这是智能电动车管理系统！")
+        response = wechat_instance.response_text("智能电动车管理系统！")
         return HttpResponse(response, content_type="application/xml")
     elif isinstance(message, EventMessage):
         print message.type
