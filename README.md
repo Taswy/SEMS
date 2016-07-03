@@ -194,9 +194,9 @@ POST数据示例:
 
 说明：
 
-字段：id_client ; 类型：int； 必须：是； 备注：客户端id
+字段：ammeterGroup_number ; 类型：str； 必须：是； 备注：客户端id
 
-字段：Ammeter_id ; 类型：int ; 必须：是 ; 备注：充电处编号
+字段：ammeter_number ; 类型：str ; 必须：是 ; 备注：充电处编号
 
 返回数据格式 ：JSON
 
