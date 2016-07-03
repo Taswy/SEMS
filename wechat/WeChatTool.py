@@ -10,12 +10,12 @@ WECHAT_TOKEN = 'token'
 AppID = 'wxce660ee67e094937'
 AppSecret = '10108b4f9ec7bb9b76f4699087f620e6'
 BaseUrl = "http://wechat.tunnel.qydev.com/wechat"
-AmmeterGroupUrl = BaseUrl + "/AmmeterGroupUrl"
 redirect_uri = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxce660ee67e094937&redirect_uri=URL&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
 redirect_uri_state = redirect_uri.replace("URL",BaseUrl + "/state")
 redirect_uri_control = redirect_uri.replace("URL",BaseUrl + "/control")
 redirect_uri_bind = redirect_uri.replace("URL",BaseUrl + "/bind")
 redirect_uri_history = redirect_uri.replace("URL",BaseUrl + "/history")
+redirect_uri_nearby = redirect_uri.replace("URL",BaseUrl + "/nearby")
 wechat_instance = WechatBasic(
     token=WECHAT_TOKEN,
     appid=AppID,
@@ -28,7 +28,7 @@ wechat_instance.create_menu({
         {
             'type': 'view',
             'name': '附近',
-            'url': AmmeterGroupUrl
+            'url': redirect_uri_nearby
         },
         {
             'name': '充电',
