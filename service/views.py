@@ -7,11 +7,13 @@ import datetime
 from django.views.decorators.csrf import csrf_exempt
 import time
 from models.models import User, Charge, Ammeter, Account, AmmeterGroup, Node
+from wechat.WeChatPush import WeChatPush_payFinish
+
 
 def calculate_money(start_time,end_time,electricity=0.5):
     seconds = (end_time - start_time).total_seconds()
     money = float(seconds) / 3600 * electricity
-    return "%.2f" % money
+    return float("%.2f" % money)
 
 '''
 URL ：/checkStudent
@@ -129,13 +131,18 @@ def end(request):
             ammeter = Ammeter.objects.filter(ammeter_number=ammeter_number,group=ammeterGroup)[0]
             charge = Charge.objects.filter(ammeter=ammeter).order_by('-id')[0]
             response_data = {}
-            #获取对应最新的记录，Ammeter.status设置为off（'1'）,
+            #获取对应最新的记录，Ammeter.status设置为'4', u'闲置',
             if charge:
-                ammeter.status = '1'
+                ammeter.status = '4'
                 ammeter.save()
                 charge.status = '1'
                 charge.end_time = timezone.now()
                 charge.save()
+                account = Account()
+                account.charge = charge
+                account.money = calculate_money(charge.start_time,charge.end_time)
+                account.save()
+                #WeChatPush_payFinish(user=charge.user,account=account)
                 return HttpResponse(json.dumps({"result":1}), content_type="application/json")
             return HttpResponse(json.dumps({"result":0}) , content_type="application/json")
         except Exception,e:

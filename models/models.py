@@ -48,7 +48,7 @@ class AmmeterGroup(models.Model):
     sum_number = models.IntegerField(null=False,default=0,verbose_name=u"站组电表总量")
 
     def __unicode__(self):
-        return u'id:%d 序列号：%s' % (self.id,self.ammeterGroup_number)
+        return u'id:%d 序列号:%s 名称:%s' % (self.id,self.ammeterGroup_number,self.ammeterGroup_name)
 
     class Meta:
         verbose_name_plural = u"充电站组"
@@ -88,8 +88,8 @@ class Charge(models.Model):
 
 
     def __unicode__(self):
-        return u'用户名：%s,电表id：%s,状态：%s,开始时间：%s,结束时间：%s' % (
-            self.user.username, self.ammeter.id, self.status, self.start_time, self.end_time)
+        return u'用户名：%s,电表id：%s,状态：%s,开始时间：%s' % (
+            self.user.username, self.ammeter.ammeter_number, self.status, self.start_time)
 
 class Node(models.Model):
     charge = models.ForeignKey(Charge)
@@ -104,7 +104,7 @@ class Node(models.Model):
 class Account(models.Model):
     charge = models.ForeignKey(Charge)
     money = models.DecimalField(max_digits=4, decimal_places=2, null=False, default=0.00)
-    message = models.CharField(max_length=200, blank=True)
+    message = models.CharField(max_length=200, blank=True,null=True)
 
     def __unicode__(self):
         return u'充电记录id：%d,金额：%f' % (self.charge_id, self.money)
