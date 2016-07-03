@@ -7,7 +7,6 @@ from wechat import views,wechat_index,wechatViews
 
 
 urlpatterns = [
-    url(r'^$',TemplateView.as_view(template_name="wechat/index.html")),
     url(r'^regist$',views.regist),
     url(r'^doregist$',views.doregist),
     url(r'^dologin$',views.dologin),

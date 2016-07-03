@@ -39,7 +39,7 @@ def bind(request):
         user = User.objects.get(openid=openid)
         return render(request,"wechat/welcome.html",{"flag":"2","user":user} )
     else:
-        return  render(request,"wechat/index.html",context)
+        return  render(request,"wechat/regist.html",context)
 
 
 
