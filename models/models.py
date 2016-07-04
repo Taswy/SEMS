@@ -38,7 +38,6 @@ class Manager(models.Model):
         verbose_name_plural = u"管理员"
 
 
-
 class AmmeterGroup(models.Model):
     ammeterGroup_number = models.CharField(null=False,max_length=45,verbose_name=u'编号')
     ammeterGroup_name = models.CharField(null=False,max_length=45,blank=True,verbose_name=u'名称')
