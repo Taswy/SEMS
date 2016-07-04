@@ -142,7 +142,7 @@ def end(request):
                 account.charge = charge
                 account.money = calculate_money(charge.start_time,charge.end_time)
                 account.save()
-                #WeChatPush_payFinish(user=charge.user,account=account)
+                WeChatPush_payFinish(user=charge.user,account=account)
                 return HttpResponse(json.dumps({"result":1}), content_type="application/json")
             return HttpResponse(json.dumps({"result":0}) , content_type="application/json")
         except Exception,e:

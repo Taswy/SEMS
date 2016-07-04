@@ -1,10 +1,6 @@
 # author: HuYong
 # -*- coding: utf-8 -*-
 from wechat_sdk import WechatBasic
-import requests
-import json
-import time
-
 
 WECHAT_TOKEN = 'token'
 AppID = 'wxce660ee67e094937'
