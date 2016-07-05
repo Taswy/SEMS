@@ -189,7 +189,6 @@ def charge(request):
             return HttpResponse(json.dumps({"result":1}), content_type="application/json")
         except Exception,e:
             return HttpResponse(json.dumps({"result":-1,"message":e.message}), content_type="application/json")
-
 '''URL ：/AmmeterControl
 
 HTTP请求方式 ：POST
