@@ -122,7 +122,7 @@ POST数据示例:
       "voltage_value":2.01,
       "energy_value":12,
       "ammeterGroup_number": '0001',
-      "ammeter_number":'000000000001'
+      "ammeter_number":'000000000000'
     }
 
 ammeterGroup_number ; 类型：str； 必须：是； 备注：客户端id
