@@ -120,6 +120,7 @@ POST数据示例:
     {
       "current_value":1.05,
       "voltage_value":2.01,
+      "energy_value":12
       "ammeterGroup_number": '0001',
       "ammeter_number":'0001'
     }
@@ -131,6 +132,8 @@ ammeter_number ; 类型：str； 必须：是； 备注：电表
 current_value ; 类型：float； 必须：是； 备注：当前电流值
 
 voltage_value ; 类型：float； 必须：是； 备注：当前电压值
+
+energy_value ; 类型：float； 必须：是； 备注：当前消耗的电能
 
 返回数据格式 ：JSON
 
