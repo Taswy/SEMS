@@ -120,7 +120,7 @@ POST数据示例:
     {
       "current_value":1.05,
       "voltage_value":2.01,
-      "energy_value":12
+      "energy_value":12,
       "ammeterGroup_number": '0001',
       "ammeter_number":'0001'
     }
