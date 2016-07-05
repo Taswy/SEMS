@@ -182,6 +182,7 @@ def charge(request):
             charge = Charge.objects.filter(ammeter=ammeter).order_by('-id')[0]
             if charge:
                 new_node = Node()
+                new_node.charge = charge
                 new_node.current_value = current_value
                 new_node.voltage_value = voltage_value
                 new_node.save()
