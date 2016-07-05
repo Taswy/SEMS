@@ -106,7 +106,7 @@ class Account(models.Model):
     message = models.CharField(max_length=200, blank=True,null=True)
 
     def __unicode__(self):
-        return u'充电记录id：%d,金额：%f' % (self.charge_id, self.money)
+        return u'充电记录id：%d,金额：%s' % (self.charge_id, self.money)
 
     class Meta:
         verbose_name_plural = "消费记录"
