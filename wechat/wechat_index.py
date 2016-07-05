@@ -40,7 +40,7 @@ def index(request):
         return HttpResponse(response, content_type="application/xml")
     elif isinstance(message, EventMessage):
         print message.type
-        if message.type == "location":
+        if message.type == "location":                     #接收用户的位置信息，并实时更新
             longitude = message.longitude
             latitude  = message.latitude
             openid = message.source
@@ -51,6 +51,10 @@ def index(request):
                 user.save()
             except:
                 pass
+        elif message.type == "subscribe" :                  #首次推送
+            response = wechat_instance.response_text("这是智能电动车管理系统！\n详情请查看首页！")
+            return HttpResponse(response, content_type="application/xml")
+
 
 
 
