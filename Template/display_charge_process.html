@@ -12,13 +12,13 @@
 <script>
     $(function () {
 
-        var chart2 = new Highcharts.Chart({
+        var chart1 = new Highcharts.Chart({
             chart: {
                 renderTo: 'container',//!!!!
                 type: 'spline'
             },
             title: {
-                text: '充电情况展示',
+                text: '电能情况展示',
                 x: -20 //center
             },
             xAxis: {
@@ -26,7 +26,7 @@
             },
             yAxis: {
                 title: {
-                    text: '电压'
+                    text: '电能'
                 },
                 plotLines: [{
                     value: 0,
@@ -36,7 +36,7 @@
             },
             tooltip: {
                 xDateFormat: '%Y/%m/%d    %H:%M:%S',
-                valueSuffix: '°'
+                valueSuffix: 'kW·H'
             },
             legend: {
                 layout: 'vertical',
@@ -44,10 +44,44 @@
                 verticalAlign: 'middle',
                 borderWidth: 0
             },
-            series: [{"name": "电压"},{"name": "电流"}]
+            series: [{"name": "电能"}]
 
         });
+        var chart2 = new Highcharts.Chart({
+            chart: {
+                renderTo: 'container1',//!!!!
+                type: 'spline'
+            },
+            title: {
+                text: '电流情况展示',
+                x: -20 //center
+            },
+            xAxis: {
+                type: 'datetime'
+            },
+            yAxis: {
+                title: {
+                    text: '电流'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                xDateFormat: '%Y/%m/%d    %H:%M:%S',
+                valueSuffix: 'A'
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: [{"name": "电流"}]
 
+        });
 
         function getForm() {
             //使用JQuery从后台获取JSON格式的数据
@@ -61,16 +95,16 @@
                 var hour = item.hour;
                 var minute = item.minute;
                 var second = item.second;
-                var voltage = item.voltage;
+                var energy = item.energy;
                 var current = item.current;
                 var d = Date.UTC(year, month, day, hour, minute, second);
-                var voltage_list = [d, voltage];
+                var energy_list = [d, energy];
                 var current_list = [d, current];
-                datalist1[i] = voltage_list;
+                datalist1[i] = energy_list;
                 datalist2[i] = current_list;
             });
-            chart2.series[0].setData(datalist1);
-            chart2.series[1].setData(datalist2)
+            chart1.series[0].setData(datalist1);
+            chart2.series[0].setData(datalist2)
         }
 
         $(document).ready(function () {
@@ -83,6 +117,6 @@
 </script>
 <body>
 <div id="container" style="min-width:600px;height:400px"></div>
-<p id="latest"></p>
+<div id="container1" style="min-width:600px;height:400px"></div>
 </body>
 </html>

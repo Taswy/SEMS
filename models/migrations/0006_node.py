@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('current_value', models.FloatField(verbose_name='\u7535\u6d41')),
-                ('voltage_value', models.FloatField(verbose_name='\u7535\u538b')),
+                ('energy_value', models.FloatField(verbose_name='\u7535\u538b')),
                 ('time', models.DateTimeField(default=django.utils.timezone.now, verbose_name='\u65f6\u523b')),
                 ('charge', models.ForeignKey(to='models.Charge')),
             ],

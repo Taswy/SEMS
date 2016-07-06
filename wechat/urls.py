@@ -7,7 +7,7 @@ from wechat import wechat_index,wechatViews
 
 urlpatterns = [
     url(r'^wechat_index$',wechat_index.index),
-    url(r'^index$', wechatViews.index),
+    #url(r'^index$', wechatViews.index),
     url(r'^regist$',wechatViews.regist),
     url(r'^doregist$',wechatViews.doregist),
     url(r'^bind$',wechatViews.bind),
