@@ -15,7 +15,7 @@ def calculate_money(start_time,end_time,electricity=0.5):
     money = float(seconds) / 3600 * electricity
     return float("%.2f" % money)
 
-def timestamp2datetime(timestamp, convert_to_local=False):
+def timestamp2datetime(timestamp, convert_to_local=True):
     ''' Converts UNIX timestamp to a datetime object. '''
     if isinstance(timestamp, (int, long, float)):
         dt = datetime.datetime.utcfromtimestamp(timestamp)
