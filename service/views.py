@@ -159,9 +159,10 @@ POST数据示例:
 
 {
   "current_value":1.05,
-  "voltage_value":2.01,
-  "ammeterGroup_number": '0001',
-  "ammeter_number":'0001'
+  "energy_value":2.01,
+  "ammeterGroup_number": "0001",
+  "ammeter_number":"0001",
+  "
 }
 返回数据示例 ：
 
@@ -174,7 +175,7 @@ def charge(request):
         try:
             r = json.loads(request.body)
             current_value = r["current_value"]
-            voltage_value = r["voltage_value"]
+            energy_value = r["energy_value"]
             ammeter_number = r["ammeter_number"]
             ammeterGroup_number = r["ammeterGroup_number"]
             ammeterGroup = AmmeterGroup.objects.filter(ammeterGroup_number=ammeterGroup_number)[0]
@@ -184,7 +185,7 @@ def charge(request):
                 new_node = Node()
                 new_node.charge = charge
                 new_node.current_value = current_value
-                new_node.voltage_value = voltage_value
+                new_node.energy_value = energy_value
                 new_node.save()
             return HttpResponse(json.dumps({"result":1}), content_type="application/json")
         except Exception,e:

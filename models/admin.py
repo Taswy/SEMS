@@ -33,9 +33,9 @@ class ChargeAdmin(admin.ModelAdmin):
             data = []
             for node in nodes:
                 time = node.time
-                dic = {"year":time.year,"month":time.month,"day":time.day,"hour":time.hour,"minute":time.minute,"second":time.second,"voltage":node.voltage_value,"current":node.current_value}
+                dic = {"year":time.year,"month":time.month,"day":time.day,"hour":time.hour,"minute":time.minute,"second":time.second,"energy":node.energy_value,"current":node.current_value}
                 data.append(dic)
-                print u'电压：%s,电流：%s,时间：%s'% (node.voltage_value, node.current_value,node.time)
+                print u'电能：%s,电流：%s,时间：%s'% (node.energy_value, node.current_value,node.time)
             return render_to_response("display_charge_process.html",{"data":json.dumps(data)})
 
     display_charge_process.short_description = u'展示充电过程（仅一条充电记录）'
