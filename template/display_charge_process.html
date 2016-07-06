@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>充电情况展示</title>
+</head>
+<script src="/static/highchart/jquery-1.8.3.min.js"></script>
+<script src="/static/highchart/highcharts.js"></script>
+<script src="/static/highchart/exporting.js"></script>
+
+<script src="/static/highchart/highcharts-more.js"></script>
+<script>
+    $(function () {
+
+        var chart1 = new Highcharts.Chart({
+            chart: {
+                renderTo: 'container',//!!!!
+                type: 'spline'
+            },
+            title: {
+                text: '电能情况展示',
+                x: -20 //center
+            },
+            xAxis: {
+                type: 'datetime'
+            },
+            yAxis: {
+                title: {
+                    text: '电能'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                xDateFormat: '%Y/%m/%d    %H:%M:%S',
+                valueSuffix: 'kW·H'
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: [{"name": "电能"}]
+
+        });
+        var chart2 = new Highcharts.Chart({
+            chart: {
+                renderTo: 'container1',//!!!!
+                type: 'spline'
+            },
+            title: {
+                text: '电流情况展示',
+                x: -20 //center
+            },
+            xAxis: {
+                type: 'datetime'
+            },
+            yAxis: {
+                title: {
+                    text: '电流'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                xDateFormat: '%Y/%m/%d    %H:%M:%S',
+                valueSuffix: 'A'
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: [{"name": "电流"}]
+
+        });
+
+        function getForm() {
+            //使用JQuery从后台获取JSON格式的数据
+            var data = {{ data|safe}};
+            var datalist1 = [];
+            var datalist2 = [];
+            $.each(data, function (i, item) {
+                var year = item.year;
+                var month = item.month;
+                var day = item.day;
+                var hour = item.hour;
+                var minute = item.minute;
+                var second = item.second;
+                var energy = item.energy;
+                var current = item.current;
+                var d = Date.UTC(year, month, day, hour, minute, second);
+                var energy_list = [d, energy];
+                var current_list = [d, current];
+                datalist1[i] = energy_list;
+                datalist2[i] = current_list;
+            });
+            chart1.series[0].setData(datalist1);
+            chart2.series[0].setData(datalist2)
+        }
+
+        $(document).ready(function () {
+            //每隔60秒自动调用方法，实现图表的实时更新
+            getForm()
+            //window.setInterval(getForm,3000);
+
+        });
+    });
+</script>
+<body>
+<div id="container" style="min-width:600px;height:400px"></div>
+<div id="container1" style="min-width:600px;height:400px"></div>
+</body>
+</html>
