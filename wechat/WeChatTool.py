@@ -7,12 +7,12 @@ AppID = 'wxce660ee67e094937'
 AppSecret = '10108b4f9ec7bb9b76f4699087f620e6'
 BaseUrl = "http://wechat.tunnel.qydev.com/wechat"
 redirect_uri = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxce660ee67e094937&redirect_uri=URL&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
-index = BaseUrl+"/index"
-redirect_uri_state = redirect_uri.replace("URL",BaseUrl + "/state")
-redirect_uri_control = redirect_uri.replace("URL",BaseUrl + "/control")
-redirect_uri_bind = redirect_uri.replace("URL",BaseUrl + "/bind")
-redirect_uri_history = redirect_uri.replace("URL",BaseUrl + "/history")
-redirect_uri_nearby = redirect_uri.replace("URL",BaseUrl + "/nearby")
+index = BaseUrl + "/index"
+redirect_uri_state = redirect_uri.replace("URL", BaseUrl + "/state")
+redirect_uri_control = redirect_uri.replace("URL", BaseUrl + "/control")
+redirect_uri_bind = redirect_uri.replace("URL", BaseUrl + "/bind")
+redirect_uri_history = redirect_uri.replace("URL", BaseUrl + "/history")
+redirect_uri_nearby = redirect_uri.replace("URL", BaseUrl + "/nearby")
 wechat_instance = WechatBasic(
     token=WECHAT_TOKEN,
     appid=AppID,
@@ -21,7 +21,7 @@ wechat_instance = WechatBasic(
 
 # 创建自定义菜单
 wechat_instance.create_menu({
-    'button':[
+    'button': [
         {
             'type': 'view',
             'name': '首页',
@@ -67,7 +67,7 @@ wechat_instance.create_menu({
 })
 
 
-#创建带参数的二维码
+# 创建带参数的二维码
 # url = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=TOKEN"
 # token = wechat_instance.get_access_token().get("access_token")
 # url = url.replace("TOKEN",token)
