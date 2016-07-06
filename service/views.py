@@ -15,6 +15,14 @@ def calculate_money(start_time,end_time,electricity=0.5):
     money = float(seconds) / 3600 * electricity
     return float("%.2f" % money)
 
+def timestamp2datetime(timestamp, convert_to_local=False):
+    ''' Converts UNIX timestamp to a datetime object. '''
+    if isinstance(timestamp, (int, long, float)):
+        dt = datetime.datetime.utcfromtimestamp(timestamp)
+        if convert_to_local: # 是否转化为本地时间
+            dt = dt + datetime.timedelta(hours=8) # 中国默认时区
+        return dt
+    return timestamp
 '''
 URL ：/checkStudent
 POST数据示例:{"card_number":"5sdf87e4"}
@@ -178,14 +186,17 @@ def charge(request):
             energy_value = r["energy_value"]
             ammeter_number = r["ammeter_number"]
             ammeterGroup_number = r["ammeterGroup_number"]
+            time = r["time"]
             ammeterGroup = AmmeterGroup.objects.filter(ammeterGroup_number=ammeterGroup_number)[0]
             ammeter = Ammeter.objects.filter(ammeter_number=ammeter_number,group=ammeterGroup)[0]
             charge = Charge.objects.filter(ammeter=ammeter).order_by('-id')[0]
+            now_time = timestamp2datetime(time)
             if charge:
                 new_node = Node()
                 new_node.charge = charge
                 new_node.current_value = current_value
                 new_node.energy_value = energy_value
+                new_node.time = now_time
                 new_node.save()
             return HttpResponse(json.dumps({"result":1}), content_type="application/json")
         except Exception,e:
