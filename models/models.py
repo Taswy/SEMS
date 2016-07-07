@@ -94,6 +94,8 @@ class Node(models.Model):
     charge = models.ForeignKey(Charge)
     current_value = models.FloatField(null=False,verbose_name=u"电流")
     energy_value = models.FloatField(null=False,verbose_name=u"电能")
+    voltage_value = models.FloatField(null=False,verbose_name=u"电压")
+    power_value = models.FloatField(null=False,verbose_name=u"功率")
     time = models.DateTimeField(null=False, default=timezone.now,verbose_name=u'时刻')
     class Meta:
         verbose_name_plural = u"时值节点"

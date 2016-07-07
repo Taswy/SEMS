@@ -184,6 +184,8 @@ def charge(request):
             r = json.loads(request.body)
             current_value = r["current_value"]
             energy_value = r["energy_value"]
+            voltage_value = r["voltage_value"]
+            power_value = r["power_value"]
             ammeter_number = r["ammeter_number"]
             ammeterGroup_number = r["ammeterGroup_number"]
             time = r["time"]
@@ -196,6 +198,8 @@ def charge(request):
                 new_node.charge = charge
                 new_node.current_value = current_value
                 new_node.energy_value = energy_value
+                new_node.voltage_value = voltage_value
+                new_node.power_value = power_value
                 new_node.time = now_time
                 new_node.save()
             return HttpResponse(json.dumps({"result":1}), content_type="application/json")
@@ -227,18 +231,22 @@ def AmmeterControl(request):
             ammeterGroup_number = r["ammeterGroup_number"]
             ammeterGroup = AmmeterGroup.objects.filter(ammeterGroup_number=ammeterGroup_number)[0]
             response_data = {}
+            response_data["status"] = []
             if ammeterGroup:
                 ammeter_s = Ammeter.objects.filter(group=ammeterGroup)
                 for ammeter in ammeter_s:
+                    ammeter_status = {}
                     #STATUS_CHOICE = (('0', u'开启'), ('1', u'关闭'), ('2', u'低压'), ('3', u'异常'),('4', u'闲置'))
                     if ammeter.status == '0' or ammeter.status == '2':
-                        response_data[ammeter.ammeter_number] = "1"
+                        ammeter_status[ammeter.ammeter_number] = "1"
                     elif ammeter.status == '1':
-                        response_data[ammeter.ammeter_number] = "0"
+                        ammeter_status[ammeter.ammeter_number] = "0"
                     elif ammeter.status == '3':
-                        response_data[ammeter.ammeter_number] = "3" #异常即为锁定转台
+                        ammeter_status[ammeter.ammeter_number] = "3" #异常即为锁定转台
                     else: #闲置状态
-                        response_data[ammeter.ammeter_number] = "2"
+                        ammeter_status[ammeter.ammeter_number] = "2"
+
+                    response_data["status"].append(ammeter_status)
             return HttpResponse(json.dumps(response_data), content_type="application/json")
         except Exception,e:
             return HttpResponse(json.dumps({"result":-1,"message":e.message}), content_type="application/json")
@@ -292,4 +300,3 @@ def money(request):
         except Exception,e:
             return HttpResponse(json.dumps({"result":-1,"message":e.message}), content_type="application/json")
 
-##

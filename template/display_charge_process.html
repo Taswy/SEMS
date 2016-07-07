@@ -14,7 +14,7 @@
 
         var chart1 = new Highcharts.Chart({
             chart: {
-                renderTo: 'container',//!!!!
+                renderTo: 'container1',//!!!!
                 type: 'spline'
             },
             title: {
@@ -49,7 +49,7 @@
         });
         var chart2 = new Highcharts.Chart({
             chart: {
-                renderTo: 'container1',//!!!!
+                renderTo: 'container2',//!!!!
                 type: 'spline'
             },
             title: {
@@ -83,11 +83,82 @@
 
         });
 
+        var chart3 = new Highcharts.Chart({
+            chart: {
+                renderTo: 'container3',//!!!!
+                type: 'spline'
+            },
+            title: {
+                text: '电压情况展示',
+                x: -20 //center
+            },
+            xAxis: {
+                type: 'datetime'
+            },
+            yAxis: {
+                title: {
+                    text: '电压'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                xDateFormat: '%Y/%m/%d    %H:%M:%S',
+                valueSuffix: 'V'
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: [{"name": "电压"}]
+        });
+        var chart4 = new Highcharts.Chart({
+            chart: {
+                renderTo: 'container4',//!!!!
+                type: 'spline'
+            },
+            title: {
+                text: '功率情况展示',
+                x: -20 //center
+            },
+            xAxis: {
+                type: 'datetime'
+            },
+            yAxis: {
+                title: {
+                    text: '功率'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                xDateFormat: '%Y/%m/%d    %H:%M:%S',
+                valueSuffix: 'kW'
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: [{"name": "功率"}]
+
+        });
         function getForm() {
             //使用JQuery从后台获取JSON格式的数据
             var data = {{ data|safe}};
             var datalist1 = [];
             var datalist2 = [];
+            var datalist3 = [];
+            var datalist4 = [];
             $.each(data, function (i, item) {
                 var year = item.year;
                 var month = item.month - 1;
@@ -97,14 +168,23 @@
                 var second = item.second;
                 var energy = item.energy;
                 var current = item.current;
+                var voltage = item.voltage;
+                var power = item.power;
                 var d = Date.UTC(year, month, day, hour, minute, second);
                 var energy_list = [d, energy];
                 var current_list = [d, current];
+                var voltage_list = [d, voltage];
+                var power_list = [d, power];
                 datalist1[i] = energy_list;
                 datalist2[i] = current_list;
+                datalist3[i] = voltage_list;
+                datalist4[i] = power_list;
+
             });
             chart1.series[0].setData(datalist1);
-            chart2.series[0].setData(datalist2)
+            chart2.series[0].setData(datalist2);
+            chart3.series[0].setData(datalist4);
+            chart4.series[0].setData(datalist4);
         }
 
         $(document).ready(function () {
@@ -116,7 +196,9 @@
     });
 </script>
 <body>
-<div id="container" style="min-width:600px;height:400px"></div>
 <div id="container1" style="min-width:600px;height:400px"></div>
+<div id="container2" style="min-width:600px;height:400px"></div>
+<div id="container3" style="min-width:600px;height:400px"></div>
+<div id="container4" style="min-width:600px;height:400px"></div>
 </body>
 </html>
