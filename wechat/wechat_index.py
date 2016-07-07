@@ -1,12 +1,11 @@
 # author: HuYong
 # coding=utf-8
 from django.http import HttpResponseBadRequest
-from django.shortcuts import  HttpResponse
+from django.shortcuts import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from wechat_sdk.basic import WechatBasic
 from wechat_sdk.messages import TextMessage, EventMessage
 from models.models import User
-
 
 WECHAT_TOKEN = 'token'
 AppID = 'wxce660ee67e094937'
@@ -35,14 +34,14 @@ def index(request):
     # 解析本次请求的 XML 数据
     wechat_instance.parse_data(data=request.body)
     message = wechat_instance.get_message()
-    if isinstance(message,TextMessage):
+    if isinstance(message, TextMessage):
         response = wechat_instance.response_text("智能电动车管理系统！")
         return HttpResponse(response, content_type="application/xml")
     elif isinstance(message, EventMessage):
         print message.type
-        if message.type == "location":                     #接收用户的位置信息，并实时更新
+        if message.type == "location":  # 接收用户的位置信息，并实时更新
             longitude = message.longitude
-            latitude  = message.latitude
+            latitude = message.latitude
             openid = message.source
             try:
                 user = User.objects.get(openid=openid)
@@ -51,14 +50,6 @@ def index(request):
                 user.save()
             except:
                 pass
-        elif message.type == "subscribe" :                  #首次推送
+        elif message.type == "subscribe":  # 首次推送
             response = wechat_instance.response_text("这是智能电动车管理系统！\n详情请查看首页！")
             return HttpResponse(response, content_type="application/xml")
-
-
-
-
-
-
-
-
