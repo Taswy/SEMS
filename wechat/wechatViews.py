@@ -78,8 +78,14 @@ def nearby(request):
     address = GetAddress(user.longitude, user.latitude).encode("utf-8")
     content = ""
     content = content + "你现在位于：" + address + "\n\n"
+    distanceList = []
     for group in groups:
         distance = calcDistance(user.latitude, user.longitude, group.latitude, group.longitude)
+        distanceList.append(distance)
+    distanceListSort = distanceList[:]
+    distanceListSort.sort()
+    for distance in distanceListSort:
+        group = groups[distanceList.index(distance)]
         content = content + group.ammeterGroup_name.encode("utf-8") + "\t还有" + str(
             group.valid_number) + "个空位" + "\t距离您" + str(distance) + "m\n"
     print content
