@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title></title>
+    <!-- Bootstrap -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="/static/js/html5shiv.js"></script>
+    <script src="/static/js/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+        th {
+            text-align: center;
+            background-color: salmon;
+            color: #ffffff;
+        }
+        td {
+            text-align: center;
+        }
+        #headline {
+            font-size: 18px;
+            color: #101010;
+        }
+        html,body {
+            font-family: "Microsoft YaHei UI Light";
+            width: 100%;
+            background-color: #f7f7f7;
+            margin-bottom: 1.5em;
+        }
+
+        #footer {
+            position: fixed;
+            bottom: 0;
+            background-color: #262626;
+            width: 100%;
+            margin-top: 5em;
+        }
+        #copy{
+            color: #d4d4d4;
+            font-size: 0.2em;
+        }
+
+        #headline {
+            font-size: 18px;
+            color: #101010;
+            margin-top: 0.3em;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div id="header" class="navbar navbar-inverse navbar-fixed-top" role="navigation" id="menu-nav">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="index">SEMS  智能电动车管理系统</a>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <hr/>
+    <div class="row">
+        <div class="col-xs-12">
+            <div id="headline">
+                <span class="glyphicon glyphicon glyphicon-map-marker"></span>
+                附近
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="alert alert-info">
+        当前位置:{{ address }}
+    </div>
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            附近的充电站（按距离排序）
+        </div>
+        <div class="panel-body">
+            <div class="table">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>位置</th>
+                        <th>余量</th>
+                        <th>距离</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{{ resultGroupName.0 }}</td>
+                        <td>{{ Num.0 }}</td>
+                        <td>{{ dis.0 }}m</td>
+                    </tr>
+                    <tr>
+                        <td>{{ resultGroupName.1 }}</td>
+                        <td>{{ Num.1 }}</td>
+                        <td>{{ dis.1 }}m</td>
+                    </tr>
+                    <tr>
+                        <td>{{ resultGroupName.2 }}</td>
+                        <td>{{ Num.2 }}</td>
+                        <td>{{ dis.2 }}m</td>
+                    </tr><tr>
+                        <td>{{ resultGroupName.3 }}</td>
+                        <td>{{ Num.3 }}</td>
+                        <td>{{ dis.3 }}m</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="modal-footer" id="footer">
+    <div class="container" >
+        <div class="row">
+            <div class="col-xs-12">
+                <div align="center">
+                    <p id="copy">
+                        Copyright &copy
+                        <a href="index.html">SEMS</a>
+                        &nbsp;|&nbsp;&nbsp;2016.SEMS All rights reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="/static/js/jquery-3.0.0.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/static/js/bootstrap.min.js"></script>
+</body>
+</html>
