@@ -20,7 +20,7 @@ HTTP请求方式 ：POST
 
 POST数据示例:{"card_number":"5sdf87e4"}
 
-id_number ; 类型：str ; 必须：是 ; 备注:序列号
+card_number ; 类型：str ; 必须：是 ; 备注:序列号
 
 返回数据格式 ：JSON
 
