@@ -2,7 +2,6 @@
 # coding=utf-8
 import json
 from math import *
-
 import requests
 
 

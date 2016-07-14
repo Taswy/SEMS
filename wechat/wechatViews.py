@@ -1,5 +1,6 @@
 # author: HuYong
 # coding=utf-8
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, HttpResponse
 from models.models import User, Charge, Node, Account, AmmeterGroup
 import requests
@@ -26,10 +27,16 @@ def getOpenid(request):
 
 
 # 由openid换取user对象
-def getUser(request):
-    openid = getOpenid(request)
-    user = User.objects.get(openid=openid)
+def getUser(request=None,openid=None):
+    if not openid:
+        openid = getOpenid(request)
+    try:
+        user = User.objects.get(openid=openid)
+    except:
+        user = None
     return user
+
+
 
 
 '''**************************************************************************************************'''
@@ -40,14 +47,17 @@ def getUser(request):
 
 # 用户绑定情况判断
 def bind(request):
-    openid = getOpenid(request)
+    try:
+        openid = getOpenid(request)
+    except:
+        openid = request.GET.get("openid")
     context = {"openid": openid}
     count = User.objects.filter(openid=openid).count()
     if count > 0:
         user = User.objects.get(openid=openid)
-        return render(request, "wechat/welcome.html", {"flag": "2", "user": user})
+        return render(request, "wechat/success.html")
     else:
-        return render(request, "wechat/regist.html", context)
+        return render(request, "wechat/register.html", context)
 
 
 
@@ -58,18 +68,17 @@ def doregist(request):
         student_number = request.POST.get("student_number", "")
         password = request.POST.get("password", "")
         count = User.objects.filter(student_number=student_number).count()
+        print count
         if count > 0:
-            openid = request.POST.get("openid")
-            new = User(username=username, password=password, student_number=student_number, openid=openid)
-            new.save()
-            return render(request, "wechat/welcome.html", {"openid": openid, "user": new})
+            openid = request.GET.get("openid")
+            user = User.objects.get(student_number=student_number)
+            user.username = username
+            user.password = password
+            user.openid = openid
+            user.save()
+            return render(request, "wechat/success.html")
         else:
-            html = '''
-                <head>
-                <meta http-equiv="refresh" content="1;url=/wechat/regist">
-                </head>
-                <h1>请到管理员处登记！</h1>'''
-            return HttpResponse(html)
+            return  render(request,"wechat/error.html",{"content":"您未在校登记电动车！"})
     else:
         html = '''
             <head>
@@ -84,15 +93,15 @@ def doregist(request):
 def history(request):
     user = getUser(request)
     charges = Charge.objects.filter(user=user).order_by("-start_time")
-    content = ""
+    result= []
     for charge in charges:
         try:
             account = Account.objects.get(charge=charge)
-            content = content + "充电时间：\n" + str(account.charge.start_time) + "---" + str(
-                account.charge.end_time) + "\n充电费用：" + str(account.money) + "\n******************\n"
+            account.charge.start_time
+            result.append(account)
         except:
             pass
-    return HttpResponse(content)
+    return render(request, "wechat/consumption.html", {"accounts":result,"user":user})
 
 
 
@@ -106,11 +115,12 @@ def history(request):
 
 # 返回充电站的信息列表
 def nearby(request):
-    user = getUser(request)
+    openid = getOpenid(request)
+    user = getUser(openid=openid)
+    if user == None:
+        return HttpResponseRedirect("bind?openid=" + openid)
     groups = AmmeterGroup.objects.all()
     address = GetAddress(user.longitude, user.latitude).encode("utf-8")
-    content = ""
-    content = content + "你现在位于：" + address + "\n\n"
     distanceList = []
     for group in groups:
         distance = calcDistance(user.latitude, user.longitude, group.latitude, group.longitude)
@@ -125,43 +135,73 @@ def nearby(request):
         resultGroupName.append(group.ammeterGroup_name.encode("utf-8"))
         resultValidNum.append(group.valid_number)
         resultDistance.append(distance)
-    return HttpResponse(content)
+    return render(request, "wechat/nearby.html", {"resultGroupName":resultGroupName,"Num":resultValidNum,"dis":resultDistance,"address":address})
 
 
 # 返回实时状态
 def state(request):
-    user = getUser(request)
-    charge = Charge.objects.filter(user=user).order_by("-start_time")[0]
-    node = Node.objects.filter(time__gt=charge.start_time).order_by("-time")[0]
-    prosess = (node.energy_value / 5 + charge.InitEnergy)*100
-    if prosess > 75:
-        result = 4
-    elif prosess > 50:
-        result = 3
-    elif prosess > 25:
-        result = 2
+    if request.method == "GET":
+        try:
+            user = getUser(request)
+        except:
+            openid = request.GET.get("openid")
+            user = User.objects.get(openid=openid)
+        try:
+            charge = Charge.objects.filter(user=user).order_by("-start_time")[0]
+            account = Account.objects.get(charge=charge)
+        except:
+            return render(request, "wechat/error.html",{"content":"尚未进行充电！"})
+        if  charge.InitEnergy < 1:
+            return render(request, "wechat/battery.html",{"openid":user.openid})
+        else:
+            node = Node.objects.filter(charge=charge).order_by("-id")[0]
+            prosess = (float(node.energy_value) / 5 * 100+ float(charge.InitEnergy))
+            if prosess >= 75:
+                result = "/static/img/battery_4.png"
+            elif prosess >= 50:
+                result = "/static/img/battery_3.png"
+            elif prosess >= 25:
+                result = "/static/img/battery_2.png"
+            else:
+                result = "/static/img/battery_1.png"
+            return render(request, "wechat/battery_RealTime.html", {"src": result})
     else:
-        result = 1
-    return HttpResponse(node[0].voltage_value)
+        openid = request.GET.get("openid")
+        InitEnergy = request.POST.get("battery")
+        user = User.objects.get(openid=openid)
+        charge = Charge.objects.filter(user=user).order_by("-start_time")[0]
+        charge.InitEnergy = InitEnergy
+        charge.save()
+        return  HttpResponseRedirect("state?openid="+openid)
 
 
 # 反向控制
 def control(request):
-    user = getUser(request)
-    charge = Charge.objects.filter(user=user).order_by("-start_time")[0]
+    try:
+        user = getUser(request)
+    except:
+        openid = request.GET.get("openid")
+        user = User.objects.get(openid=openid)
+    try:
+        charge = Charge.objects.filter(user=user).order_by("-start_time")[0]
+        account = Account.objects.get(charge=charge)
+    except:
+        return render(request, "wechat/error.html",{"content":"尚未进行充电！"})
     ammeter = charge.ammeter
-    if request.method == 'GET':
+    action = request.GET.get("action","")
+    if action == "":
         status = ammeter.status
         if status == '0':
-            pass
+            return render(request, "wechat/r_control_1.html", {"openid": user.openid})
         else:
-            pass
+            return render(request, "wechat/r_control_2.html", {"openid": user.openid})
     else:
-        action = request.REQUEST.get("action")
         if action == "start":
             ammeter.status = '0'
         else:
             ammeter.status = '1'
+        ammeter.save()
+        return HttpResponseRedirect("control?openid=" + user.openid)
 
 
 '''**************************************************************************************************'''
