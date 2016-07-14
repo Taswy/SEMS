@@ -71,6 +71,7 @@ class Charge(models.Model):
     user = models.ForeignKey(User,verbose_name=u'用户')
     ammeter = models.ForeignKey(Ammeter,verbose_name=u'电表')
     STATUS_CHOICE = (('0', u'正在充电'), ('1', u'充电完成'), ('2', u'充电异常'))
+    InitEnergy = models.IntegerField(null=True,blank=True,default=0,verbose_name=u'起始电压')
     status = models.CharField(null=False,max_length=1, choices=STATUS_CHOICE,default='0',verbose_name=u'充电状态')
     start_time = models.DateTimeField(null=False, default=timezone.now,verbose_name=u'开始时间')
     end_time = models.DateTimeField(blank=True, null=True,verbose_name=u'结束时间')
