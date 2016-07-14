@@ -4,11 +4,37 @@ import django
 from django.http import HttpResponse
 from django.utils import timezone
 import datetime
-from django.views.decorators.csrf import csrf_exempt
 import time
 from models.models import User, Charge, Ammeter, Account, AmmeterGroup, Node
 from wechat.WeChatPush import WeChatPush_payFinish
+#获取message信息
+def inter_message(message):
+    return map(int,message.split(","))
 
+#修改message
+def set_message(charge,point5=None,point3=None,pause_time=None):
+    messageL = inter_message(charge.message)
+    if point5 and messageL[0]<5:
+        messageL[0] += 1
+    if point3 and messageL[0]==5 and messageL[1]<5:
+        messageL[1] += 1
+    elif not point3 and messageL[1]<5:
+        messageL[1] = 0
+    if pause_time:
+        messageL[2] += 10
+    charge.message = ','.join(map(str,messageL))
+    charge.save()
+
+#通电充电超过12小时将自动断电
+def check_time_out(charge):
+    seconds = (datetime.datetime.now()-charge.start_time).total_seconds() - inter_message(charge.message)[2]
+    print seconds
+    if seconds > 43200:
+        return True
+    return False
+
+def check_low_valtage(request):
+    return True
 
 def calculate_money(start_time,end_time,electricity=0.5):
     seconds = (end_time - start_time).total_seconds()
