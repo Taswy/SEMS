@@ -1,7 +1,7 @@
 # author: HuYong
 # coding=utf-8
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, HttpResponse
 from models.models import User, Charge, Node, Account, AmmeterGroup
 import requests
 import json
@@ -68,15 +68,17 @@ def doregist(request):
         student_number = request.POST.get("student_number", "")
         password = request.POST.get("password", "")
         count = User.objects.filter(student_number=student_number).count()
-        print count
         if count > 0:
-            openid = request.GET.get("openid")
             user = User.objects.get(student_number=student_number)
-            user.username = username
-            user.password = password
-            user.openid = openid
-            user.save()
-            return render(request, "wechat/success.html")
+            if user.openid == "":
+                openid = request.GET.get("openid")
+                user.username = username
+                user.password = password
+                user.openid = openid
+                user.save()
+                return render(request, "wechat/success.html")
+            else:
+                return render(request,"wechat/error.html",{"content":"此账号已被绑定!"})
         else:
             return  render(request,"wechat/error.html",{"content":"您未在校登记电动车！"})
     else:
@@ -91,7 +93,11 @@ def doregist(request):
 
 # 查询消费记录
 def history(request):
-    user = getUser(request)
+    openid = getOpenid(request)
+    user = getUser(openid=openid)
+    if user == None:
+        return HttpResponseRedirect("bind?openid=" + openid)
+    # user = getUser(request)
     charges = Charge.objects.filter(user=user).order_by("-start_time")
     result= []
     for charge in charges:
@@ -141,11 +147,15 @@ def nearby(request):
 # 返回实时状态
 def state(request):
     if request.method == "GET":
-        try:
-            user = getUser(request)
-        except:
-            openid = request.GET.get("openid")
-            user = User.objects.get(openid=openid)
+        openid = getOpenid(request)
+        user = getUser(openid=openid)
+        if user == None:
+            return HttpResponseRedirect("bind?openid=" + openid)
+        # try:
+        #     user = getUser(request)
+        # except:
+        #     openid = request.GET.get("openid")
+        #     user = User.objects.get(openid=openid)
         try:
             charge = Charge.objects.filter(user=user).order_by("-start_time")[0]
             account = Account.objects.get(charge=charge)
@@ -178,10 +188,17 @@ def state(request):
 # 反向控制
 def control(request):
     try:
-        user = getUser(request)
+        openid = getOpenid(request)
     except:
         openid = request.GET.get("openid")
-        user = User.objects.get(openid=openid)
+    user = getUser(openid=openid)
+    if user == None:
+        return HttpResponseRedirect("bind?openid=" + openid)
+    # try:
+    #     user = getUser(request)
+    # except:
+    #     openid = request.GET.get("openid")
+    #     user = User.objects.get(openid=openid)
     try:
         charge = Charge.objects.filter(user=user).order_by("-start_time")[0]
         account = Account.objects.get(charge=charge)
