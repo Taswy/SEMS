@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1 user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!--开启对web app的支持-->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!--主要是正对苹果手机将数字自动识别为号码-->
+    <meta name="format-detection" content="telephone=no" />
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <!-- qq浏览器 -->
+    <meta name="x5-fullscreen" content="true">
+    <meta name="x5-orientation" content="portrait">
+    <meta id="eqMobileViewport" name="viewport" content="width=320, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <script>
+        var g = document.documentElement.clientWidth / 320;
+        document.getElementById('eqMobileViewport').setAttribute("content", "width=320, initial-scale=" + g + ", maximum-scale=" + g + ", user-scalable=no")
+    </script>
+    <title></title>
+
+    <!-- Bootstrap -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/jquery.fullpage.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="/static/js/html5shiv.js"></script>
+    <script src="/static/js/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+        html,body {
+            font-family: "Microsoft YaHei UI Light";
+            width: 100%;
+            background-color: #f5f5f5;
+            margin-bottom: 4em;
+        }
+
+        #battery_realTime {
+            margin-top: 5em;
+        }
+        #footer {
+            position: absolute;
+            bottom: 0;
+            background-color: #262626;
+            width: 100%;
+        }
+
+        #copy{
+            color: #d4d4d4;
+            font-size: 0.2em;
+        }
+
+        #headline {
+            font-size: 18px;
+            color: #101010;
+            margin-top: 0.3em;
+        }
+        #batter_status_now {
+            color: #3dd74f;
+        }
+        #battery {
+            margin-bottom: 1em;
+        }
+
+    </style>
+</head>
+<body>
+<div id="fullpage">
+    <div id="header" class="navbar navbar-inverse navbar-fixed-top" role="navigation" id="menu-nav">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="index.html">SEMS  智能电动车管理系统</a>
+            </div>
+        </div>
+    </div>
+    <div class="section s1">
+        <div class="container">
+            <div id="headline" class="row">
+                <div class="col-lg-12">
+                    <div id="batter_status_now">
+                        <span class="glyphicon glyphicon-signal"></span>
+                        电池充电前状态
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <h5 class="text-info">请选择充电前电池状态:</h5>
+            <div class="row">
+                <div class="col-lg-12">
+                    <form method="post" action="state?openid={{ openid }}" class="form-inline" role="form" id="cbox">
+                        <div class="form-group-lg">
+                            <label class="radio-inline">
+                                <input type="radio" name="battery" id="optionsRadios1" value="1"  onclick="change_img1()"/>
+                                0%-25%&nbsp;&nbsp;
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="battery" id="optionsRadios2" value="25"  onclick="change_img2()"/>
+                                25%-50%
+                            </label>
+                            </br>
+                            <label class="radio-inline">
+                                <input type="radio" name="battery" id="optionsRadios3" value="50"  onclick="change_img3()"/>
+                                50%-75%
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="battery" id="optionsRadios4" value="75"  onclick="change_img4()"/>
+                                75%-100%
+                            </label>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12" align="center">
+                    <img id="battery" width="80em" height="130em" src="/static/img/battery_0.png">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <button  id="confirm" type="submit" class="btn btn-danger btn-block btn-sm">确定</button>
+                </div>
+            </div>
+                    </form>
+                </div>
+            </div>
+            <hr/>
+
+        </div>
+    </div>
+    <footer class="modal-footer" id="footer">
+        <div class="container" >
+            <div class="row">
+                <div class="col-xs-12">
+                    <div align="center">
+                        <p id="copy">
+                            Copyright &copy
+                            <a href="index.html">SEMS</a>
+                            &nbsp;|&nbsp;&nbsp;2016.SEMS All rights reserved.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="/static/js/jquery-3.0.0.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/jquery.fullpage.min.js"></script>
+<script src="/static/js/jquery.easings.min.js"></script>
+<script src="/static/js/move.min.js"></script>
+
+<script type="text/javascript">
+    function change_img1() {
+        document.getElementById("battery").src="/static/img/battery_1.png"
+    }
+    function change_img2() {
+        document.getElementById("battery").src="/static/img/battery_2.png"
+    }
+    function change_img3() {
+        document.getElementById("battery").src="/static/img/battery_3.png"
+    }
+    function change_img4() {
+        document.getElementById("battery").src="/static/img/battery_4.png"
+    }
+    $(document).ready(function() {
+        $('#fullpage').fullpage({
+            controlArrows: false,
+            anchors:['page1'],
+            verticalCentered: false,   //内容不垂直居中
+            fixedElements: '#header',
+            autoScrolling:false,
+            /*scrollBar:true,*/
+            paddingTop:'60px',
+
+            afterLoad: function (link, index) {
+
+            },
+            onLeave:function (link,index) {
+
+            },
+            afterRender:function () {
+            }
+        });
+    });
+</script>
+</body>
+</html>
