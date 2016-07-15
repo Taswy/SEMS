@@ -22,7 +22,7 @@ class AmmeterGroupAdmin(admin.ModelAdmin):
 @admin.register(Ammeter)
 class AmmeterAdmin(admin.ModelAdmin):
     list_display = ("id","ammeter_number","name","status","group",)
-    search_fields = ("ammeter_number","name","group",)
+    search_fields = ("ammeter_number","name","group__ammeterGroup_number","group__ammeterGroup_name",)
     list_filter = ["status"]
 
 @admin.register(Charge)
@@ -62,6 +62,11 @@ class ChargeAdmin(admin.ModelAdmin):
     search_fields = ("user__username","ammeter__ammeter_number",)
     list_filter = ["status"]
 
-admin.site.register(Account)
+@admin.register(Account)
+class AccountAdmin(admin.ModelAdmin):
+    list_display = ("id","charge","money",)
+    search_fields = ("charge__user__name",)
+
+
 admin.site.register(Node)
 

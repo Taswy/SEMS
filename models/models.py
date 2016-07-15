@@ -54,8 +54,8 @@ class AmmeterGroup(models.Model):
 
 
 class Ammeter(models.Model):
-    ammeter_number = models.CharField(null=False,max_length=45)
-    name = models.CharField(null=False, max_length=45)
+    ammeter_number = models.CharField(null=False,max_length=45,verbose_name=u'序列号')
+    name = models.CharField(null=False, max_length=45,verbose_name=u'名称')
     STATUS_CHOICE = (('0', u'开启'), ('1', u'关闭'), ('2', u'低压'), ('3', u'异常'),('4', u'闲置'))
     status = models.CharField(max_length=1, choices=STATUS_CHOICE,default='1',verbose_name=u'电表状态')
     group = models.ForeignKey(AmmeterGroup,verbose_name=u"所属站组")
@@ -75,8 +75,9 @@ class Charge(models.Model):
     status = models.CharField(null=False,max_length=1, choices=STATUS_CHOICE,default='0',verbose_name=u'充电状态')
     start_time = models.DateTimeField(null=False, default=timezone.now,verbose_name=u'开始时间')
     end_time = models.DateTimeField(blank=True, null=True,verbose_name=u'结束时间')
-    overtime = models.IntegerField(blank=True, null=True,default=0,verbose_name=u'超时')
-    message = models.CharField(blank=True, null=True,max_length=200,verbose_name=u'备注')
+    overtime = models.DateTimeField(blank=True, null=True,verbose_name=u'超时')
+    lowtime = models.DateTimeField(blank=True, null=True,verbose_name=u'低压时长')
+    message = models.CharField(blank=True, null=True,max_length=200,verbose_name=u'备注',default='0,0,0,1,1,0')#
     '''
     def __init__(self,user=None,ammeter=None):
         self.ammeter = ammeter
@@ -105,12 +106,12 @@ class Node(models.Model):
 
 class Account(models.Model):
     charge = models.ForeignKey(Charge)
-    money = models.DecimalField(max_digits=4, decimal_places=2, null=False, default=0.00)
-    message = models.CharField(max_length=200, blank=True,null=True)
+    money = models.DecimalField(max_digits=4, decimal_places=2, null=False, default=0.00,verbose_name=u"金额")
+    message = models.CharField(max_length=200, blank=True,null=True,verbose_name=u"备注")
 
     def __unicode__(self):
         return u'充电记录id：%d,金额：%s' % (self.charge_id, self.money)
 
     class Meta:
-        verbose_name_plural = "消费记录"
+        verbose_name_plural = u"消费记录"
 
