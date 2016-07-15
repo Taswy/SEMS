@@ -6,22 +6,27 @@ from django.utils import timezone
 import datetime
 import time
 from models.models import User, Charge, Ammeter, Account, AmmeterGroup, Node
-from wechat.WeChatPush import WeChatPush_payFinish
+from wechat.WeChatPush import *
+
 #获取message信息
 def inter_message(message):
     return map(int,message.split(","))
 
 #修改message
-def set_message(charge,point5=None,point3=None,pause_time=None):
+def set_message(charge,point5=None,point3=None,pause_time=None,if_post_timeout=None,if_post_low=None):
     messageL = inter_message(charge.message)
     if point5 and messageL[0]<5:
         messageL[0] += 1
     if point3 and messageL[0]==5 and messageL[1]<5:
         messageL[1] += 1
-    elif not point3 and messageL[1]<5:
+    elif not point3 and messageL[1]<5:#连续5次低于0.3
         messageL[1] = 0
     if pause_time:
         messageL[2] += 10
+    if if_post_low:
+        messageL[3] = 0
+    if if_post_timeout:
+        messageL[4] = 0
     charge.message = ','.join(map(str,messageL))
     charge.save()
 
@@ -33,8 +38,11 @@ def check_time_out(charge):
         return True
     return False
 
-def check_low_valtage(request):
-    return True
+#检测涓流充电
+def check_low_current(message):
+    if inter_message(message)[2]==5:
+        return True
+    return False
 
 def calculate_money(start_time,end_time,electricity=0.5):
     seconds = (end_time - start_time).total_seconds()
@@ -228,6 +236,22 @@ def charge(request):
                 new_node.power_value = power_value
                 new_node.time = now_time
                 new_node.save()
+                if current_value>0.5:
+                    set_message(charge,point5=True)
+                elif charge.status=='0' and current_value<0.3:
+                    set_message(charge,point3=True)
+                if inter_message(charge.message)[4] and check_time_out(charge):
+                    #发送超过12小时
+
+                    #充电状态置'1'关闭
+                    charge.status = '1'
+                    set_message(charge,if_post_timeout=True)
+                if inter_message(charge.message)[3] and check_low_current(charge.message):
+                    #推送低压
+                    WeChatPush_alreadyFinish(user=charge.user,charge=charge)
+                    #充电状态置'2'
+                    charge.status = '2'
+                    set_message(charge,if_post_low=True)#保证只推送一次
             return HttpResponse(json.dumps({"result":1}), content_type="application/json")
         except Exception,e:
             return HttpResponse(json.dumps({"result":-1,"message":e.message}), content_type="application/json")
@@ -266,6 +290,9 @@ def AmmeterControl(request):
                     if ammeter.status == '0' or ammeter.status == '2':
                         ammeter_status[ammeter.ammeter_number] = "1"
                     elif ammeter.status == '1':
+                        charge = Charge.objects.filter(ammeter=ammeter).order_by("-id")[0]
+                        #暂停时修改message：
+                        set_message(charge,pause_time=True)
                         ammeter_status[ammeter.ammeter_number] = "0"
                     elif ammeter.status == '3':
                         ammeter_status[ammeter.ammeter_number] = "3" #异常即为锁定转台

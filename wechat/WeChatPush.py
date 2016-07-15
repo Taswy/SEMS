@@ -48,7 +48,7 @@ def WeChatPush_Exception(user, charge):
 
 # 超时取车
 def WeChatPush_delay(user):
-    responsedata = "你好，" + str(user.username) + "\n由于长时间未取车占用充电车位，已被管理员处理。\n请自行联系管理员！"
+    responsedata = "你好，" + str(user.username) + "\n由于长时间未取车占用充电车位，车或已被管理员处理。\n请自行联系管理员！"
     data = {"data": {"value": responsedata, "color": "#173177"}}
     json = wechat_instance.send_template_message(str(user.openid), "OZfofkQxfQ-RjUDvl-sfdiz2-1nn81J4CQb19QgDs-Y", data)
     print json
