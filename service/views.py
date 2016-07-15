@@ -97,7 +97,7 @@ def checkStudent(request):
             return HttpResponse(json.dumps(response_data)
                                 , content_type="application/json")
         except Exception,e:
-            return HttpResponse(json.dumps({"result":-1,"message":e.message}), content_type="application/json")
+            return HttpResponse(json.dumps({"result":-1,"message":e}), content_type="application/json")
 
 '''
 URL ：/start
