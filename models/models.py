@@ -77,7 +77,7 @@ class Charge(models.Model):
     end_time = models.DateTimeField(blank=True, null=True,verbose_name=u'结束时间')
     overtime = models.DateTimeField(blank=True, null=True,verbose_name=u'超时')
     lowtime = models.DateTimeField(blank=True, null=True,verbose_name=u'低压时长')
-    message = models.CharField(blank=True, null=True,max_length=200,verbose_name=u'备注',default='0,0,0,1,1,0')#
+    message = models.CharField(blank=True, null=True,max_length=200,verbose_name=u'备注',default='0,0,0,1,1')#
     '''
     def __init__(self,user=None,ammeter=None):
         self.ammeter = ammeter

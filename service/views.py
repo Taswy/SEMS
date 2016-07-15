@@ -40,7 +40,7 @@ def check_time_out(charge):
 
 #检测涓流充电
 def check_low_current(message):
-    if inter_message(message)[2]==5:
+    if inter_message(message)[1]==5:
         return True
     return False
 
@@ -238,19 +238,19 @@ def charge(request):
                 new_node.save()
                 if current_value>0.5:
                     set_message(charge,point5=True)
-                elif charge.status=='0' and current_value<0.3:
+                elif charge.ammeter.status=='0' and current_value<0.3:
                     set_message(charge,point3=True)
-                if inter_message(charge.message)[4] and check_time_out(charge):
+                if not inter_message(charge.message)[4] and check_time_out(charge):
                     #发送超过12小时
 
                     #充电状态置'1'关闭
-                    charge.status = '1'
+                    charge.ammeter.status = '1'
                     set_message(charge,if_post_timeout=True)
                 if inter_message(charge.message)[3] and check_low_current(charge.message):
                     #推送低压
                     WeChatPush_alreadyFinish(user=charge.user,charge=charge)
                     #充电状态置'2'
-                    charge.status = '2'
+                    charge.ammeter.status = '2'
                     set_message(charge,if_post_low=True)#保证只推送一次
             return HttpResponse(json.dumps({"result":1}), content_type="application/json")
         except Exception,e:
