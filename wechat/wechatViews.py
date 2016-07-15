@@ -11,9 +11,8 @@ from wechat.WeChatUtil import GetAddress, calcDistance
 AppID = 'wxce660ee67e094937'
 AppSecret = '10108b4f9ec7bb9b76f4699087f620e6'
 
-
-
 '''**************************工具方法**************************************************'''
+
 
 # 由request请求中的code换取openid
 def getOpenid(request):
@@ -27,7 +26,7 @@ def getOpenid(request):
 
 
 # 由openid换取user对象
-def getUser(request=None,openid=None):
+def getUser(request=None, openid=None):
     if not openid:
         openid = getOpenid(request)
     try:
@@ -37,10 +36,7 @@ def getUser(request=None,openid=None):
     return user
 
 
-
-
 '''**************************************************************************************************'''
-
 
 '''*********************************我的**************************************************************'''
 
@@ -60,8 +56,7 @@ def bind(request):
         return render(request, "wechat/register.html", context)
 
 
-
-#用户绑定
+# 用户绑定
 def doregist(request):
     if request.method == 'POST':  # 当提交表单时
         username = request.POST.get("username", "")
@@ -78,9 +73,9 @@ def doregist(request):
                 user.save()
                 return render(request, "wechat/success.html")
             else:
-                return render(request,"wechat/error.html",{"content":"此账号已被绑定!"})
+                return render(request, "wechat/error.html", {"content": "此账号已被绑定!"})
         else:
-            return  render(request,"wechat/error.html",{"content":"您未在校登记电动车！"})
+            return render(request, "wechat/error.html", {"content": "您未在校登记电动车！"})
     else:
         html = '''
             <head>
@@ -88,7 +83,6 @@ def doregist(request):
             </head>
             格式错误！'''
         return HttpResponse(html)
-
 
 
 # 查询消费记录
@@ -99,7 +93,7 @@ def history(request):
         return HttpResponseRedirect("bind?openid=" + openid)
     # user = getUser(request)
     charges = Charge.objects.filter(user=user).order_by("-start_time")
-    result= []
+    result = []
     for charge in charges:
         try:
             account = Account.objects.get(charge=charge)
@@ -107,14 +101,10 @@ def history(request):
             result.append(account)
         except:
             pass
-    return render(request, "wechat/consumption.html", {"accounts":result,"user":user})
-
+    return render(request, "wechat/consumption.html", {"accounts": result, "user": user})
 
 
 '''************************************************************************************************'''
-
-
-
 
 '''****************************************充电**************************************************************'''
 
@@ -141,31 +131,32 @@ def nearby(request):
         resultGroupName.append(group.ammeterGroup_name.encode("utf-8"))
         resultValidNum.append(group.valid_number)
         resultDistance.append(distance)
-    return render(request, "wechat/nearby.html", {"resultGroupName":resultGroupName,"Num":resultValidNum,"dis":resultDistance,"address":address})
+    return render(request, "wechat/nearby.html",
+                  {"resultGroupName": resultGroupName, "Num": resultValidNum, "dis": resultDistance,
+                   "address": address})
 
 
 # 返回实时状态
 def state(request):
     if request.method == "GET":
-        openid = getOpenid(request)
-        user = getUser(openid=openid)
-        if user == None:
-            return HttpResponseRedirect("bind?openid=" + openid)
-        # try:
-        #     user = getUser(request)
-        # except:
-        #     openid = request.GET.get("openid")
-        #     user = User.objects.get(openid=openid)
+        # openid = getOpenid(request)
+        # user = getUser(openid=openid)
+        # if user == None:
+        #     return HttpResponseRedirect("bind?openid=" + openid)
+        try:
+            user = getUser(request)
+        except:
+            openid = request.GET.get("openid")
+            user = User.objects.get(openid=openid)
         try:
             charge = Charge.objects.filter(user=user).order_by("-start_time")[0]
-            account = Account.objects.get(charge=charge)
         except:
-            return render(request, "wechat/error.html",{"content":"尚未进行充电！"})
-        if  charge.InitEnergy < 1:
-            return render(request, "wechat/battery.html",{"openid":user.openid})
+            return render(request, "wechat/error.html", {"content": "尚未进行充电！"})
+        if charge.InitEnergy < 1:
+            return render(request, "wechat/battery.html", {"openid": user.openid})
         else:
             node = Node.objects.filter(charge=charge).order_by("-id")[0]
-            prosess = (float(node.energy_value) / 5 * 100+ float(charge.InitEnergy))
+            prosess = (float(node.energy_value) / 5 * 100 + float(charge.InitEnergy))
             if prosess >= 75:
                 result = "/static/img/battery_4.png"
             elif prosess >= 50:
@@ -182,30 +173,29 @@ def state(request):
         charge = Charge.objects.filter(user=user).order_by("-start_time")[0]
         charge.InitEnergy = InitEnergy
         charge.save()
-        return  HttpResponseRedirect("state?openid="+openid)
+        return HttpResponseRedirect("state?openid=" + openid)
 
 
 # 反向控制
 def control(request):
-    try:
-        openid = getOpenid(request)
-    except:
-        openid = request.GET.get("openid")
-    user = getUser(openid=openid)
-    if user == None:
-        return HttpResponseRedirect("bind?openid=" + openid)
     # try:
-    #     user = getUser(request)
+    #     openid = getOpenid(request)
     # except:
     #     openid = request.GET.get("openid")
-    #     user = User.objects.get(openid=openid)
+    # user = getUser(openid=openid)
+    # if user == None:
+    #     return HttpResponseRedirect("bind?openid=" + openid)
+    try:
+        user = getUser(request)
+    except:
+        openid = request.GET.get("openid")
+        user = User.objects.get(openid=openid)
     try:
         charge = Charge.objects.filter(user=user).order_by("-start_time")[0]
-        account = Account.objects.get(charge=charge)
     except:
-        return render(request, "wechat/error.html",{"content":"尚未进行充电！"})
+        return render(request, "wechat/error.html", {"content": "尚未进行充电！"})
     ammeter = charge.ammeter
-    action = request.GET.get("action","")
+    action = request.GET.get("action", "")
     if action == "":
         status = ammeter.status
         if status == '0':
