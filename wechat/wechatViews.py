@@ -139,17 +139,14 @@ def nearby(request):
 # 返回实时状态
 def state(request):
     if request.method == "GET":
-        # openid = getOpenid(request)
-        # user = getUser(openid=openid)
-        # if user == None:
-        #     return HttpResponseRedirect("bind?openid=" + openid)
-        try:
-            user = getUser(request)
-        except:
-            openid = request.GET.get("openid")
-            user = User.objects.get(openid=openid)
+        openid = getOpenid(request)
+        user = getUser(openid=openid)
+        if user == None:
+            return HttpResponseRedirect("bind?openid=" + openid)
         try:
             charge = Charge.objects.filter(user=user).order_by("-start_time")[0]
+            if charge.end_time != None:
+                return render(request, "wechat/error.html", {"content": "尚未进行充电！"})
         except:
             return render(request, "wechat/error.html", {"content": "尚未进行充电！"})
         if charge.InitEnergy < 1:
@@ -178,20 +175,17 @@ def state(request):
 
 # 反向控制
 def control(request):
-    # try:
-    #     openid = getOpenid(request)
-    # except:
-    #     openid = request.GET.get("openid")
-    # user = getUser(openid=openid)
-    # if user == None:
-    #     return HttpResponseRedirect("bind?openid=" + openid)
     try:
-        user = getUser(request)
+        openid = getOpenid(request)
     except:
         openid = request.GET.get("openid")
-        user = User.objects.get(openid=openid)
+    user = getUser(openid=openid)
+    if user == None:
+        return HttpResponseRedirect("bind?openid=" + openid)
     try:
         charge = Charge.objects.filter(user=user).order_by("-start_time")[0]
+        if charge.end_time != None:
+            return render(request, "wechat/error.html", {"content": "尚未进行充电！"})
     except:
         return render(request, "wechat/error.html", {"content": "尚未进行充电！"})
     ammeter = charge.ammeter

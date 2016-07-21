@@ -28,6 +28,6 @@ def GetAddress(longitude, latitude):
     URL = BaseUrl.replace("LON", str(longitude)).replace("LAT", str(latitude)).replace("KEY","9c9aaf8f45b7d23a26274866b578a2a9")
     response = requests.get(URL)
     s = json.loads(response.text)
-    return s["regeocode"]["formatted_address"]+s["regeocode"]["roads"][1]["name"]
+    return s["regeocode"]["formatted_address"]
 
-# GetAddress(120.269112,31.486492)
+print GetAddress(118.721893,32.141903)
