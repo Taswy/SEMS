@@ -17,6 +17,7 @@ wechat_instance = WechatBasic(
 
 # 充电完成推送
 def WeChatPush_alreadyFinish(user, charge):
+    print user
     responsedata = "你好，" + str(user.username) + "\n你的车已经充电完毕，请尽快取车"
     data = {"data": {"value": responsedata, "color": "#173177"}}
     json = wechat_instance.send_template_message(str(user.openid), "saRJ7C92DuovutwG57V7wcvxeVoZwp04VvUWSZHOnas", data)
