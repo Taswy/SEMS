@@ -30,4 +30,4 @@ def GetAddress(longitude, latitude):
     s = json.loads(response.text)
     return s["regeocode"]["formatted_address"]
 
-print GetAddress(118.721893,32.141903)
+#print GetAddress(118.721893,32.141903)
