@@ -48,6 +48,7 @@ def index(request):
                 user.longitude = float(longitude)
                 user.latitude = float(latitude)
                 user.save()
+                print user.longitude
             except:
                 pass
         elif message.type == "subscribe":  # 首次推送

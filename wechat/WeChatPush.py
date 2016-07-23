@@ -17,10 +17,14 @@ wechat_instance = WechatBasic(
 
 # 充电完成推送
 def WeChatPush_alreadyFinish(user, charge):
-    print user
-    responsedata = "你好，" + str(user.username) + "\n你的车已经充电完毕，请尽快取车"
+    print "**************"
+    responsedata = "你好，" + user.username.encode("utf-8") + "\n你的车已经充电完毕，请尽快取车"
     data = {"data": {"value": responsedata, "color": "#173177"}}
-    json = wechat_instance.send_template_message(str(user.openid), "saRJ7C92DuovutwG57V7wcvxeVoZwp04VvUWSZHOnas", data)
+    print data
+    try:
+        json = wechat_instance.send_template_message(str(user.openid), "saRJ7C92DuovutwG57V7wcvxeVoZwp04VvUWSZHOnas", data)
+    except Exception,e:
+        print e
     print json
 
 
@@ -30,10 +34,7 @@ def WeChatPush_payFinish(user, account):
     money = account.money
     start_time = account.charge.start_time
     end_time = account.charge.end_time
-    over_time = account.charge.overtime
-    responsedata = "你好," + str(name) + ":\n本次充电信息：\n开始时间:" + str(start_time)[:-7] + "\n结束时间:" + str(end_time)[
-                                                                                                :-7] + "\n取车超时：" + str(
-        over_time) + "小时" + "\n充电金额:" + str(money) + "元"
+    responsedata = "你好," + name.encode("utf-8") + ":\n本次充电信息：\n开始时间:" + str(start_time) + "\n结束时间:" + str(end_time)[:-7] + "\n取车超时：" + "\n充电金额:" + str(money) + "元"
     data = {"message": {"value": responsedata, "color": "#173177"}}
     json = wechat_instance.send_template_message(str(user.openid), "qG8RIocMDo7bHwhrR1bFqJ6IpULniA1qNcvcT2xzmmU", data)
     print json
