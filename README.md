@@ -1,6 +1,6 @@
 # 校园电动车管理系统
 Smart Electric-Bike Management System (SEMS)
-[演示视频](http://v.qq.com/x/page/f0315o93xa0.html)
+[演示视频](http://v.youku.com/v_show/id_XMTY1Njg4NTkyMA==.html)
 ----------
 ## 1.系统架构
 * 环境：Ubantu14.2+Apache+Python2.7+Django1.8.3
