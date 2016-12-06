@@ -45,6 +45,36 @@ card_number ; 类型：str ; 必须：是 ; 备注:序列号
 ### 2.2 充电开始
 **API**
 
+URL ：/PostionStatus
+
+HTTP请求方式 ：POST
+
+请求数据格式 ：JSON
+
+POST数据示例:
+
+    {
+    "desk_id":1,
+    "postion_datas":[
+            {"1":0},
+            {"2":1},
+            {"3":0},
+            {"4":1},
+            {"5":0},
+            {"6":1},
+            {"7":0},
+            {"8":1}
+        ]
+    }
+
+desk_id ; 类型：int ; 必须：是 ; 备注:桌子编号
+postion_datas ; 类型: list ; 必须: 是 ; 备注:位置状态数据
+"k" ; 类型:int; 必须:是; 备注:1:占用,0:空位
+
+
+
+**API**
+
 URL ：/start
 
 HTTP请求方式 ：POST
