@@ -8,7 +8,7 @@ from wechat_sdk.messages import TextMessage, EventMessage
 from models.models import User
 
 WECHAT_TOKEN = 'token'
-AppID = 'wxce660ee67e094937'
+AppID = 'wx0f12120163cbea26'
 AppSecret = '10108b4f9ec7bb9b76f4699087f620e6'
 
 wechat_instance = WechatBasic(

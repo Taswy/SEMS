@@ -5,7 +5,7 @@ from wechat_sdk import WechatBasic
 WECHAT_TOKEN = 'token'
 AppID = 'wxce660ee67e094937'
 AppSecret = '10108b4f9ec7bb9b76f4699087f620e6'
-BaseUrl = "http://wechat.tunnel.qydev.com/wechat"
+BaseUrl = "http://sems.tunnel.qydev.com/wechat"
 redirect_uri = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxce660ee67e094937&redirect_uri=URL&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
 index = BaseUrl + "/index"
 redirect_uri_state = redirect_uri.replace("URL", BaseUrl + "/state")

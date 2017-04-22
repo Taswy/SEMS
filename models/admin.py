@@ -2,7 +2,6 @@
 import json
 
 from django.http import HttpResponseRedirect, HttpResponse
-from simplejson import dumps
 from django.contrib import admin
 from django.shortcuts import render_to_response
 
