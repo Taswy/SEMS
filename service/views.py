@@ -247,6 +247,7 @@ def charge(request):
                     charge.ammeter.status = '1'
                     set_message(charge,if_post_timeout=True)
                 if inter_message(charge.message)[3] and check_low_current(charge.message):
+                    print "yes"
                     #推送低压
                     WeChatPush_alreadyFinish(user=charge.user,charge=charge)
                     #充电状态置'2'
