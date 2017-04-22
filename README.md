@@ -8,7 +8,7 @@ Smart Electric-Bike Management System (SEMS)
 * web前端：html5
 
 ## 2.充电站服务端 /service/
-URLBase = http://wechat.tunnel.qydev.com/service
+URLBase = http://sems.tunnel.qydev.com/service
 ### 2.1用户检索识别
 **API**
 
